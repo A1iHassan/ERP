@@ -21,11 +21,8 @@ export default function AppLayout() {
           </div>
           <div>
             <h1 className="text-lg font-bold text-slate-800 font-headline leading-tight">
-              Atheneum ERP
+              ERP
             </h1>
-            <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
-              Precision Architect
-            </p>
           </div>
         </div>
 
@@ -35,10 +32,9 @@ export default function AppLayout() {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded transition-colors duration-200 ${
-                  isActive
-                    ? "text-blue-700 font-semibold border-r-2 border-blue-700 bg-slate-200"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
+                `flex items-center gap-3 px-4 py-3 rounded transition-colors duration-200 ${isActive
+                  ? "text-blue-700 font-semibold border-r-2 border-blue-700 bg-slate-200"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
                 }`
               }
             >

@@ -123,12 +123,10 @@ export default function CustomizationPage() {
                 <button
                   key={c}
                   onClick={() => setSelectedColor(c)}
-                  className={`w-12 h-12 rounded-full border-4 border-white shadow-sm transition-transform hover:scale-110 ${
-                    selectedColor === c ? "ring-2 shadow-md" : ""
-                  }`}
+                  className={`w-12 h-12 rounded-full border-4 border-white shadow-sm transition-transform hover:scale-110 ${selectedColor === c ? "ring-2 shadow-md" : ""
+                    }`}
                   style={{
                     backgroundColor: c,
-                    ringColor: selectedColor === c ? c : undefined,
                   }}
                 />
               ))}
@@ -150,11 +148,10 @@ export default function CustomizationPage() {
               {densityOptions.map((opt) => (
                 <label
                   key={opt.value}
-                  className={`flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg cursor-pointer group hover:bg-white transition-all ${
-                    density === opt.value
+                  className={`flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg cursor-pointer group hover:bg-white transition-all ${density === opt.value
                       ? "border-2 border-primary"
                       : "border-2 border-transparent"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span
@@ -204,18 +201,16 @@ export default function CustomizationPage() {
                         [item.key]: !prev[item.key],
                       }))
                     }
-                    className={`w-10 h-5 rounded-full relative transition-colors ${
-                      toggles[item.key]
+                    className={`w-10 h-5 rounded-full relative transition-colors ${toggles[item.key]
                         ? "bg-primary"
                         : "bg-surface-container-highest"
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`absolute top-1 w-3 h-3 rounded-full transition-all ${
-                        toggles[item.key]
+                      className={`absolute top-1 w-3 h-3 rounded-full transition-all ${toggles[item.key]
                           ? "right-1 bg-white"
                           : "left-1 bg-outline"
-                      }`}
+                        }`}
                     />
                   </button>
                 </div>
