@@ -42,6 +42,9 @@ export default function AppLayout() {
               <span className="text-sm font-medium">{item.label}</span>
             </NavLink>
           ))}
+          <div className="rounded-lg p-3 text-center text-white bg-primary">
+            All features displayed in this demo are features that were previously requested and implemented for different customers
+          </div>
         </nav>
 
         <div className="px-6 pt-6 mt-auto border-t border-slate-200/50">
