@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Atheneum ERP | Customization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary": "#506076",
+              "surface-container-high": "#e1e9ee",
+              "on-surface": "#2a3439",
+              "outline-variant": "#a9b4b9",
+              "tertiary-container": "#dbddfe",
+              "on-primary": "#f8f7ff",
+              "secondary-container": "#d3e4fe",
+              "on-tertiary-container": "#4b4e69",
+              "on-secondary-container": "#435368",
+              "surface-dim": "#cfdce3",
+              "outline": "#717c82",
+              "inverse-surface": "#0b0f10",
+              "surface-tint": "#0053db",
+              "tertiary-fixed-dim": "#cdcfef",
+              "primary-fixed": "#dbe1ff",
+              "inverse-on-surface": "#9a9d9f",
+              "surface": "#f7f9fb",
+              "background": "#f7f9fb",
+              "error-container": "#fe8983",
+              "on-primary-container": "#0048bf",
+              "on-secondary-fixed": "#314055",
+              "on-primary-fixed": "#003798",
+              "primary-fixed-dim": "#c7d3ff",
+              "error": "#9f403d",
+              "secondary-dim": "#44546a",
+              "on-secondary-fixed-variant": "#4d5d73",
+              "inverse-primary": "#618bff",
+              "primary-container": "#dbe1ff",
+              "on-surface-variant": "#566166",
+              "on-background": "#2a3439",
+              "secondary-fixed-dim": "#c5d6f0",
+              "primary-dim": "#0048c1",
+              "on-tertiary": "#faf8ff",
+              "primary": "#0053db",
+              "surface-bright": "#f7f9fb",
+              "on-error-container": "#752121",
+              "tertiary-dim": "#4e516c",
+              "surface-variant": "#d9e4ea",
+              "tertiary": "#5a5d78",
+              "surface-container-lowest": "#ffffff",
+              "error-dim": "#4e0309",
+              "surface-container": "#e8eff3",
+              "on-tertiary-fixed-variant": "#555873",
+              "on-secondary": "#f7f9ff",
+              "on-tertiary-fixed": "#383c55",
+              "on-primary-fixed-variant": "#0050d4",
+              "surface-container-low": "#f0f4f7",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#fff7f6",
+              "surface-container-highest": "#d9e4ea",
+              "tertiary-fixed": "#dbddfe"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-100 flex flex-col h-full py-6 font-manrope antialiased z-50">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg shadow-lg">
+<span class="material-symbols-outlined text-on-primary">architecture</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-slate-800">Atheneum ERP</h1>
+<p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Precision Architect</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-200 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+<span class="text-sm font-medium">Assets</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-200 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="text-sm font-medium">Users</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-200 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">monitoring</span>
+<span class="text-sm font-medium">Statistics</span>
+</a>
+<a class="flex items-center px-6 py-3 text-blue-700 font-semibold border-r-2 border-blue-700 bg-slate-200 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">tune</span>
+<span class="text-sm font-medium">Customization</span>
+</a>
+<a class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-200 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="p-4 bg-white/50 rounded-xl">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Organization Logo" class="w-8 h-8 rounded-full object-cover" data-alt="corporate minimalist brand logo with geometric shapes and professional blue color scheme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBr35jpGM_wO4rCAib4PdQ81_8MicbJ7zrb1lNnnZpfPrpfsoTpwS-5jbKcJxxLwdpMf_3PDw73ZhVi6YoXE8k2H8rt_IIQZZap6KfoNekTIw1k4BzpcyWgsk7CsEZ7Vo7v6eF2ctk8IVL168rZy7p8cVjG53RWNvX3kvRB1TFMHq9FTCeJeAqtQgAb1FovHPpVt_ITpCzvChMShknE4oQrAL4yvrOeplcNaHRYhAPhOKD_057f1PJYEGMGOLnebTJzAldnCAHD7_U"/>
+<span class="text-xs font-bold text-on-surface-variant">Corp ID: 8842-X</span>
+</div>
+<div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+<p class="text-[10px] mt-2 text-on-surface-variant font-medium">Subscription: Enterprise</p>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-white/85 backdrop-blur-xl border-b border-slate-200/50 flex justify-between items-center h-16 px-8 font-manrope text-sm">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="bg-surface-container-highest border-none rounded-lg pl-10 pr-4 py-2 w-64 focus:ring-1 focus:ring-blue-500 transition-all text-sm outline-none" placeholder="Search architecture..." type="text"/>
+</div>
+<h2 class="text-xl font-black tracking-tight text-slate-900">The Precision Architect</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-blue-600 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-blue-600 transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface">Alex Strathmore</p>
+<p class="text-[10px] text-on-surface-variant uppercase font-semibold">Chief Architect</p>
+</div>
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-white shadow-sm" data-alt="professional male headshot in soft studio lighting with a neutral gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIMqzay-uxuxn9PnTPa4LrGDQLKsYif_AFXVKhIUYaOU0LuuCVA5TflbulZZKHx6yXybBs8luAEajMT0_1MP5MudRkEb6Vnm63XKBnZ67fanZAcEZq9medTtD7PsZRI0AVAM49OsK8UQhHHJm2LJ-XREmhr4UVUCiCjN4wAPBrHasg4pYLmkLR4SucFKed3sICQ3acO34ZdP9JYkDiLk9AjvnEI8UIrjWgc4antHiWS5OWukuin1s1ByTM4RSLw7DxWuOdIcGQExw"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-12 pb-12 min-h-screen bg-background">
+<!-- Editorial Header Section -->
+<header class="mb-12">
+<h1 class="font-headline text-4xl font-extrabold text-on-surface tracking-tight mb-2">Customization</h1>
+<p class="font-body text-on-surface-variant max-w-2xl leading-relaxed">
+                Define your organization's digital identity. Adjust tonal logic, manage brand assets, and refine the architectural layout of the platform.
+            </p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Branding Assets Card -->
+<section class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline text-lg font-bold text-on-surface">Branding Identity</h3>
+<span class="px-3 py-1 bg-primary-container text-on-primary-container text-[10px] font-bold rounded-full uppercase tracking-wider">Active Brand</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Logo Upload Area -->
+<div class="space-y-4">
+<label class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Primary Logo</label>
+<div class="relative group border-2 border-dashed border-outline-variant/30 rounded-xl p-8 flex flex-col items-center justify-center bg-surface hover:bg-surface-container transition-all cursor-pointer">
+<img class="h-20 w-auto mb-4 opacity-80 group-hover:opacity-100 transition-opacity" data-alt="abstract minimalist corporate logo graphic on a white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHIMllCLHNom_g6m_3G206nnI1JkS9c3A1cHFyKol-zrao-AJdNSRzuYhh9W0HXmp0_rbQ8kSnwTxjZWW1S5VXTebrtxFuMlztC0y1kP4Ca8dFYDCuUg4HHJxB25xsTm1Tr28W_mHv5IsaMmH-VLQFkNsxmL6KYmh3m7KU_--5KRPkMJNq_b3UPhPG5CzLmK2kfr14PhAAsT_01lPOIhrVpc2Y6SuO6bWXPlC69smSeMt8l4W5tq-bzoN-hX9IrM3TSs4_xZqIfuA"/>
+<p class="text-sm font-semibold text-primary">Replace Logo</p>
+<p class="text-[10px] text-on-surface-variant mt-1">SVG, PNG up to 5MB</p>
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+</div>
+</div>
+<!-- Brand Name & Description -->
+<div class="space-y-6">
+<div class="space-y-2">
+<label class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Organization Name</label>
+<input class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary transition-all text-sm outline-none font-medium" type="text" value="Atheneum Industries"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Slogan/Identity</label>
+<input class="w-full bg-surface-container-highest border-none rounded-lg px-4 py-3 focus:ring-1 focus:ring-primary transition-all text-sm outline-none font-medium" type="text" value="Precision Through Architectural Intelligence"/>
+</div>
+</div>
+</div>
+<!-- Tonal Palette Selection -->
+<div class="mt-12">
+<label class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-6 block">Tonal Palette (Primary Accent)</label>
+<div class="flex flex-wrap gap-4">
+<button class="w-12 h-12 rounded-full bg-[#0053db] border-4 border-white shadow-md ring-2 ring-[#0053db] transition-transform hover:scale-110"></button>
+<button class="w-12 h-12 rounded-full bg-[#7c3aed] border-4 border-white shadow-sm transition-transform hover:scale-110"></button>
+<button class="w-12 h-12 rounded-full bg-[#059669] border-4 border-white shadow-sm transition-transform hover:scale-110"></button>
+<button class="w-12 h-12 rounded-full bg-[#dc2626] border-4 border-white shadow-sm transition-transform hover:scale-110"></button>
+<button class="w-12 h-12 rounded-full bg-[#ea580c] border-4 border-white shadow-sm transition-transform hover:scale-110"></button>
+<button class="w-12 h-12 rounded-full bg-[#1e293b] border-4 border-white shadow-sm transition-transform hover:scale-110"></button>
+<button class="flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-highest border-2 border-dashed border-outline-variant text-outline transition-transform hover:scale-110">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Layout Preferences Card -->
+<section class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Density Controls -->
+<div class="bg-surface-container-high p-6 rounded-xl">
+<h3 class="font-headline text-md font-bold text-on-surface mb-6">Interface Density</h3>
+<div class="space-y-4">
+<label class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg cursor-pointer group hover:bg-white transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">view_headline</span>
+<span class="text-sm font-semibold">Spacious</span>
+</div>
+<input class="text-primary focus:ring-primary h-4 w-4" name="density" type="radio"/>
+</label>
+<label class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg cursor-pointer group hover:bg-white border-2 border-primary transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">reorder</span>
+<span class="text-sm font-semibold text-primary">Standard</span>
+</div>
+<input checked="" class="text-primary focus:ring-primary h-4 w-4" name="density" type="radio"/>
+</label>
+<label class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg cursor-pointer group hover:bg-white transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">view_comfy</span>
+<span class="text-sm font-semibold">Compact</span>
+</div>
+<input class="text-primary focus:ring-primary h-4 w-4" name="density" type="radio"/>
+</label>
+</div>
+</div>
+<!-- Feature Toggles -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-container">
+<h3 class="font-headline text-md font-bold text-on-surface mb-6">Global Features</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold">Glassmorphism Effects</p>
+<p class="text-[10px] text-on-surface-variant">Enable backdrop blur on navigation</p>
+</div>
+<button class="w-10 h-5 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold">Editorial Typography</p>
+<p class="text-[10px] text-on-surface-variant">Use premium display fonts for headers</p>
+</div>
+<button class="w-10 h-5 bg-primary rounded-full relative">
+<div class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>
+</button>
+</div>
+<div class="flex items-center justify-between py-2">
+<div>
+<p class="text-sm font-semibold">Compact Sidebar</p>
+<p class="text-[10px] text-on-surface-variant">Collapse navigation by default</p>
+</div>
+<button class="w-10 h-5 bg-surface-container-highest rounded-full relative">
+<div class="absolute left-1 top-1 w-3 h-3 bg-outline rounded-full"></div>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Layout Preview Area -->
+<section class="col-span-12 bg-surface-container p-8 rounded-xl">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h3 class="font-headline text-lg font-bold text-on-surface">Architectural Preview</h3>
+<p class="text-xs text-on-surface-variant">Real-time simulation of branding choices</p>
+</div>
+<div class="flex gap-4">
+<button class="px-4 py-2 text-sm font-bold text-on-surface hover:bg-surface-container-highest transition-all rounded-lg">Discard Changes</button>
+<button class="px-6 py-2 text-sm font-bold bg-primary text-on-primary rounded-lg shadow-lg hover:bg-primary-dim transition-all">Publish Identity</button>
+</div>
+</div>
+<div class="bg-white rounded-2xl overflow-hidden shadow-2xl h-[400px] flex">
+<!-- Mini SideNav -->
+<div class="w-16 bg-slate-100 flex flex-col items-center py-6 gap-6">
+<div class="w-8 h-8 bg-primary rounded-md"></div>
+<div class="w-8 h-1 bg-slate-300 rounded-full"></div>
+<div class="w-8 h-1 bg-slate-300 rounded-full"></div>
+<div class="w-8 h-1 bg-slate-300 rounded-full"></div>
+</div>
+<!-- Mini Content Area -->
+<div class="flex-1 p-8">
+<div class="h-8 w-48 bg-slate-100 rounded-lg mb-8"></div>
+<div class="grid grid-cols-3 gap-6">
+<div class="col-span-2 h-48 bg-slate-50 rounded-xl p-4">
+<div class="h-4 w-full bg-slate-200 rounded mb-3"></div>
+<div class="h-4 w-3/4 bg-slate-200 rounded mb-3"></div>
+<div class="h-4 w-1/2 bg-slate-200 rounded"></div>
+<div class="mt-12 h-16 w-full bg-white rounded-lg shadow-sm border border-slate-100"></div>
+</div>
+<div class="h-48 bg-slate-50 rounded-xl p-4 flex flex-col items-center justify-center gap-4">
+<div class="w-16 h-16 rounded-full bg-slate-200"></div>
+<div class="h-3 w-20 bg-slate-300 rounded"></div>
+</div>
+</div>
+<!-- Glass Popover Preview -->
+<div class="absolute bottom-20 right-20 w-64 p-4 bg-white/85 backdrop-blur-xl rounded-xl shadow-2xl border border-white/50">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<p class="text-[10px] font-bold uppercase text-on-surface">Glassmorphism Active</p>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-tight">This floating module demonstrates the glass and gradient logic applied to your current theme.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual Actions Bar -->
+<div class="fixed bottom-8 right-8 z-50 flex gap-4">
+<button class="bg-surface-container-lowest text-on-surface px-6 py-3 rounded-full font-bold shadow-xl flex items-center gap-2 hover:bg-white transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">visibility</span>
+            Live Demo
+        </button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-xl flex items-center gap-2 hover:bg-primary-dim transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">save</span>
+            Commit Config
+        </button>
+</div>
+</body></html>
