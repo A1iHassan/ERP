@@ -83,9 +83,7 @@ export default function AppLayout() {
             <span className="material-symbols-outlined">help_outline</span>
           </button>
           <div className="h-8 w-[1px] bg-slate-200 mx-2" />
-          <span className="text-xl font-black tracking-tight text-slate-900 font-headline">
-            The Precision Architect
-          </span>
+
         </div>
       </header>
 
