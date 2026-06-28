@@ -1,4 +1,4 @@
-package assets
+package models
 
 type Asset struct {
 	ID int `json:"id,omitempty"`
