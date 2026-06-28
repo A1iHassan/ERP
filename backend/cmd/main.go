@@ -28,9 +28,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	repo := &repositories.DBRepository{Db: *pool}
+	repo := &repositories.DBRepository{Db: pool}
 	svc := &services.AssetsService{Repo: repo}
-	handler := &handlers.AssetsHandler{Svc: svc}
+	handler := &handlers.AssetsHandler{Svc: *svc}
 
 	http.HandleFunc("/", handler.HandleAssets)
 

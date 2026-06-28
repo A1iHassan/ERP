@@ -13,7 +13,7 @@ type AssetsRepository interface {
 }
 
 type DBRepository struct {
-	Db pgxpool.Pool
+	Db *pgxpool.Pool
 }
 
 func (p *DBRepository) GetAllAssets(ctx context.Context) ([]models.Asset, error) {
