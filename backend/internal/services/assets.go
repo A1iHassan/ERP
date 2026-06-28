@@ -8,11 +8,11 @@ import (
 )
 
 type AssetsService struct {
-	repo repositories.AssetsRepository
+	Repo repositories.AssetsRepository
 }
 
 func (a *AssetsService) GetAssets(ctx context.Context) ([]models.Asset, error) {
-	assets, err := a.repo.GetAllAssets(ctx)
+	assets, err := a.Repo.GetAllAssets(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("Failed getting assets due to error: %v", err)
 	}

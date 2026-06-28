@@ -7,12 +7,12 @@ import (
 )
 
 type AssetsHandler struct {
-	svc services.AssetsService
+	Svc services.AssetsService
 }
 
 func (h *AssetsHandler) HandleAssets(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	assets, err := h.svc.GetAssets(ctx)
+	assets, err := h.Svc.GetAssets(ctx)
 	if err != nil {
 		http.Error(w, "Failed retrieving assets", http.StatusBadRequest)
 		return

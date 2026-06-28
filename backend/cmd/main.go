@@ -2,38 +2,40 @@ package main
 
 import (
 	"context"
-	"main/db"
 	"fmt"
+	"main/internal/handlers"
+	"main/internal/repositories"
+	"main/internal/services"
+	"net/http"
 	"os"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func main() {
 	ctx := context.Background()
 
-	db.InitiateDB(ctx)
-
-	defer db.Pool.Close()
-
-	data, err := db.Pool.Query(ctx, "SELECT id, name FROM assets;")
+	pool, err := pgxpool.New(ctx, "postgres://aha:aliPass@localhost:5432/erp")
 	if err != nil {
-		fmt.Printf("Couldn't perform query due to error: %v", err)
+		fmt.Printf("Couldn't create database pool due to error: %v", err)
 		os.Exit(1)
 	}
 
-	defer data.Close()
-	
-	for data.Next() {
-		var id int
-		var name string
+	defer pool.Close()
 
-		if err = data.Scan(&id, &name); err != nil {
-			fmt.Printf("couldn't scan value due to error: %v", err)
-			os.Exit(1)
-		}
-		fmt.Printf("scanned values: %v  %v\n", id, name)
+	if err = pool.Ping(ctx); err != nil {
+		fmt.Printf("Database not reachable due to error: %v", err)
+		os.Exit(1)
 	}
-	if err = data.Err(); err != nil {
-		fmt.Printf("error while looping over query values: %v", err)
+
+	repo := &repositories.DBRepository{Db: *pool}
+	svc := &services.AssetsService{Repo: repo}
+	handler := &handlers.AssetsHandler{Svc: svc}
+
+	http.HandleFunc("/", handler.HandleAssets)
+
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		fmt.Printf("Couldn't start server due to error: %v", err)
 		os.Exit(1)
 	}
 }

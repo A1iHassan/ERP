@@ -12,12 +12,12 @@ type AssetsRepository interface {
 	GetAllAssets(ctx context.Context) ([]models.Asset, error)
 }
 
-type dbRepository struct {
-	db pgxpool.Pool
+type DBRepository struct {
+	Db pgxpool.Pool
 }
 
-func (p *dbRepository) GetAllAssets(ctx context.Context) ([]models.Asset, error) {
-	assets, err := p.db.Query(ctx, "SELECT id, name, count FROM assets;")
+func (p *DBRepository) GetAllAssets(ctx context.Context) ([]models.Asset, error) {
+	assets, err := p.Db.Query(ctx, "SELECT id, name, count FROM assets;")
 	if err != nil {
 		return nil, fmt.Errorf("couldn't perform query due to error: %v", err)
 	}
