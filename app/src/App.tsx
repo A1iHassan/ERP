@@ -5,6 +5,7 @@ import UsersPage from "./pages/UsersPage";
 import StatisticsPage from "./pages/StatisticsPage";
 import CustomizationPage from "./pages/CustomizationPage";
 import SettingsPage from "./pages/SettingsPage";
+import Sales from "./pages/sales";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Route element={<AppLayout />}>
         <Route path="/" element={<Navigate to="/assets" replace />} />
         <Route path="/assets" element={<AssetsPage />} />
+        <Route path="/sales" element={<Sales />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
         <Route path="/customization" element={<CustomizationPage />} />
