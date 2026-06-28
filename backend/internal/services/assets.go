@@ -6,6 +6,6 @@ type AssetsService struct {
 	repo AssetsRepository
 }
 
-func (a *AssetsService) GetAssets(ctx context.Context) (Assets, error) {
+func (a *AssetsService) GetAssets(ctx context.Context) (Asset, error) {
 
 }
