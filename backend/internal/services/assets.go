@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 	"main/internal/models"
+	"main/internal/repositories"
 )
 
 type AssetsService struct {
-	repo AssetsRepository
+	repo repositories.AssetsRepository
 }
 
 func (a *AssetsService) GetAssets(ctx context.Context) ([]models.Asset, error) {
