@@ -19,6 +19,8 @@ func main() {
 		fmt.Printf("Couldn't perform query due to error: %v", err)
 		os.Exit(1)
 	}
+
+	defer data.Close()
 	
 	for data.Next() {
 		var id int
