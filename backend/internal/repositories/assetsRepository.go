@@ -2,9 +2,11 @@ package repositories
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"main/internal/models"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -45,6 +47,10 @@ func (p *DBRepository) CreateNewAsset(ctx context.Context, payload models.Asset)
 
 	_, err := p.Db.Exec(ctx, "INSERT INTO assets (id, name, count) VALUES ($1, $2, $3);", payload.ID, payload.Name, payload.Count)
 	if err != nil {
+		var insertError *pgconn.PgError
+		if errors.As(err, &insertError) && insertError.Code == "23505" {
+			return fmt.Errorf("Asset ID of name already exists in database")
+		}
 		return fmt.Errorf("Couldn't create asset due to error: %w", err)
 	}
 

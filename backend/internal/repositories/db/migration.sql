@@ -26,7 +26,7 @@ CREATE TABLE locations (
 
 CREATE TABLE assets (
     id INT PRIMARY KEY, 
-    name TEXT, 
+    name TEXT UNIQUE,
     count INT, 
     location_id INT,
     status_id INT,

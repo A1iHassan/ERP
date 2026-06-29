@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"main/internal/models"
 	"main/internal/services"
 	"net/http"
@@ -40,7 +41,8 @@ func (h *AssetsHandler) HandlePostAssets(w http.ResponseWriter, r *http.Request)
 	}
 
 	if err := h.Svc.CreateAssets(ctx, payload); err != nil {
-		http.Error(w, "Couldn't create asset", http.StatusBadRequest)
+		errorMessage := fmt.Sprintf("%v", err)
+		http.Error(w, errorMessage, http.StatusBadRequest)
 		return
 	}
 }
