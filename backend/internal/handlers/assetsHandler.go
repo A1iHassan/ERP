@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"main/internal/models"
 	"main/internal/services"
 	"net/http"
 )
@@ -31,7 +32,7 @@ func (h *AssetsHandler) HandlePostAssets(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	var payload CreateAsset
+	var payload models.Asset
 
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "Corrupted payload", http.StatusUnsupportedMediaType)
