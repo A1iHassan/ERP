@@ -9,7 +9,8 @@ import (
 )
 
 type AssetsRepository interface {
-	GetAllAssets(ctx context.Context) ([]models.Asset, error)
+	GetAllAssets(ctx context.Context) ([]models.Asset, error) 
+	CreateNewAsset(ctx context.Context, payload models.Asset) error
 }
 
 type DBRepository struct {
@@ -38,4 +39,14 @@ func (p *DBRepository) GetAllAssets(ctx context.Context) ([]models.Asset, error)
 		return nil, fmt.Errorf("assets iteration error: %v", err)
 	}
 	return queriedAssets, nil
+}
+
+func (p *DBRepository) CreateNewAsset(ctx context.Context, payload models.Asset) error {
+
+	_, err := p.Db.Exec(ctx, "INSERT INTO assets (id, name, count) VALUES ($1, $2, $3);", payload.ID, payload.Name, payload.Count)
+	if err != nil {
+		return fmt.Errorf("Couldn't create asset due to error: %w", err)
+	}
+
+	return nil
 }

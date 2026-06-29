@@ -19,7 +19,9 @@ func (a *AssetsService) GetAssets(ctx context.Context) ([]models.Asset, error) {
 	return assets, nil
 }
 
-func (a *AssetsService) CreateAssets(ctx context.Context) error {
-
+func (a *AssetsService) CreateAssets(ctx context.Context, payload models.Asset) error {
+	if err := a.Repo.CreateNewAsset(ctx, payload); err != nil {
+		return err
+	}
 	return nil
 }
