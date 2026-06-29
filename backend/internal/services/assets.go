@@ -25,3 +25,10 @@ func (a *AssetsService) CreateAssets(ctx context.Context, payload models.Asset) 
 	}
 	return nil
 }
+
+func (a *AssetsService) UpdateAssets(ctx context.Context, payload models.Asset) error { 
+	if err := a.Repo.UpdateExistingAsset(ctx, payload); err != nil {
+		return err
+	}
+	return nil
+}

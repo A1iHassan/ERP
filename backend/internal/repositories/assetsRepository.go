@@ -13,6 +13,7 @@ import (
 type AssetsRepository interface {
 	GetAllAssets(ctx context.Context) ([]models.Asset, error) 
 	CreateNewAsset(ctx context.Context, payload models.Asset) error
+	UpdateExistingAsset(ctx context.Context, payload models.Asset) error 
 }
 
 type DBRepository struct {
@@ -54,5 +55,18 @@ func (p *DBRepository) CreateNewAsset(ctx context.Context, payload models.Asset)
 		return fmt.Errorf("Couldn't create asset due to error: %w", err)
 	}
 
+	return nil
+}
+
+func (p *DBRepository) UpdateExistingAsset(ctx context.Context, payload models.Asset) error {
+
+	result, err := p.Db.Exec(ctx, "UPDATE assets SET id = $1, name = $2, count = $3 WHERE id = $4;", payload.ID, payload.Name, payload.Count, payload.ID)
+	if err != nil {
+		return fmt.Errorf("Couldn't update data")
+	}
+
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("No such record found")
+	}
 	return nil
 }
