@@ -32,7 +32,7 @@ func main() {
 	svc := &services.AssetsService{Repo: repo}
 	handler := &handlers.AssetsHandler{Svc: *svc}
 
-	http.HandleFunc("/", handler.HandleAssets)
+	http.HandleFunc("GET /", handler.HandleAssets)
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		fmt.Printf("Couldn't start server due to error: %v", err)

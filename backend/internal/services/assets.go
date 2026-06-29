@@ -18,3 +18,8 @@ func (a *AssetsService) GetAssets(ctx context.Context) ([]models.Asset, error) {
 	}
 	return assets, nil
 }
+
+func (a *AssetsService) CreateAssets(ctx context.Context) error {
+
+	return nil
+}
