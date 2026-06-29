@@ -72,6 +72,7 @@ func (h *AssetsHandler) HandlePatchAssets(w http.ResponseWriter, r *http.Request
 
 func (h *AssetsHandler) HandleDeleteAssets(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
+	ctx := r.Context()
 	if err := h.Svc.DeleteAsset(ctx, id); err != nil {
 		errorMessage := fmt.Sprintf("Couldn't perform deletion due to error: %v", err)
 		http.Error(w, errorMessage, http.StatusBadRequest)

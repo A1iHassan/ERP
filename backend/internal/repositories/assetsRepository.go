@@ -72,4 +72,16 @@ func (p *DBRepository) UpdateExistingAsset(ctx context.Context, payload models.A
 	return nil
 }
 
-func (
+func (p *DBRepository) DeleteAssetById(ctx context.Context, id string) error {
+
+	result, err := p.Db.Exec(ctx, "DELETE FROM assets WHERE id = $1", id)
+	if err != nil {
+		return fmt.Errorf("Couldn't delete from assets")
+	}
+
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("No such record exists")
+	}
+
+	return nil
+}
