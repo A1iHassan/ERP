@@ -32,3 +32,10 @@ func (a *AssetsService) UpdateAssets(ctx context.Context, payload models.Asset) 
 	}
 	return nil
 }
+
+func (a *AssetsService) DeleteAsset(ctx context.Context, id string) error {
+	if err := a.Repo.DeleteAssetById(ctx, id); err != nil {
+		return err
+	}
+	return nil
+}

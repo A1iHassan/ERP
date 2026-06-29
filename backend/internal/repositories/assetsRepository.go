@@ -14,6 +14,7 @@ type AssetsRepository interface {
 	GetAllAssets(ctx context.Context) ([]models.Asset, error) 
 	CreateNewAsset(ctx context.Context, payload models.Asset) error
 	UpdateExistingAsset(ctx context.Context, payload models.Asset) error 
+	DeleteAssetById(ctx context.Context, id string) error 
 }
 
 type DBRepository struct {
@@ -70,3 +71,5 @@ func (p *DBRepository) UpdateExistingAsset(ctx context.Context, payload models.A
 	}
 	return nil
 }
+
+func (
