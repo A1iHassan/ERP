@@ -1,14 +1,16 @@
 import { useQuery} from "@tanstack/react-query";
+import { useState } from "react";
 import assetsApi from "../api/assetsApi";
 
+interface Assets {
+	id: number,
+	name: string,
+	count: number,
+}
 
 export default function AssetsPage() {
-
-	interface Assets {
-		id: number,
-		name: string,
-		count: number,
-	}
+	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
+	const [adding, setAdding] = useState<boolean>(false)
 
 	const {data, isLoading, error} = useQuery<Assets[], Error>({
 		queryKey: ['user'],
@@ -42,9 +44,20 @@ export default function AssetsPage() {
             <span className="material-symbols-outlined text-lg">download</span>
             Export Report
           </button>
-          <button className="px-5 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-dim transition-all flex items-center gap-2 text-sm shadow-md shadow-primary/20">
-            <span className="material-symbols-outlined text-lg">add</span>
+          <button 
+	  className="px-5 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-dim transition-all flex items-center gap-2 text-sm shadow-md shadow-primary/20"
+	  onClick={() => {setAdding(prev => !prev)}}
+	  >
+	  {
+	    adding
+	    ? ("Cancel")
+            : 
+	    (<>
+		<span className="material-symbols-outlined text-lg">add</span>
             New Asset
+	     </>
+	    )
+	  }
           </button>
         </div>
       </div>
@@ -121,9 +134,6 @@ export default function AssetsPage() {
               </button>
             ))}
           </div>
-          <div className="text-xs font-bold text-on-surface-variant">
-            SHOWING 1-5 OF 1,284 ASSETS
-          </div>
         </div>
 
         {/* Data Table */}
@@ -148,6 +158,20 @@ export default function AssetsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-surface-container-low">
+	    <tr className={adding ? "table-row" : "hidden"}>
+	      <td>
+	        <label htmlFor="assetId"> ID </label>
+	        <input type="number" name="assetId" id="assetId"/>
+	      </td>
+	      <td>
+	        <label htmlFor="assetName"> Name </label>
+		<input type="text" name="assetName" id="assetName" />
+	      </td>
+	      <td>
+	        <label htmlFor="assetCount"> Count </label>
+		<input type="number" name="assetCount" id="assetCount" />
+	      </td>
+	    </tr>
               {data?.map((asset, i) => (
                 <tr
                   key={i}
