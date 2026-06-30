@@ -1,4 +1,4 @@
-import { useQuery} from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import assetsApi from "../api/assetsApi";
 
@@ -12,21 +12,26 @@ export default function AssetsPage() {
 	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
 	console.log(newAsset)
 	const [adding, setAdding] = useState<boolean>(false)
-
+	const queryClient = useQueryClient()
 	const {data, isLoading, error} = useQuery<Assets[], Error>({
-		queryKey: ['user'],
+		queryKey: ['assets'],
 		queryFn: async () => {
 			const response = await assetsApi.get<Assets[]>("/")
 			return response.data
 		}
 	})
 
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
-  	setNewAsset(prev => ({
-    	  ...prev,
-    	  [key]: e.value // Correctly updates the specific key based on input 'name' attribute
-  	  }));
-	};
+	const { mutate: saveNewAsset } = useMutation({
+		mutationFn: async () => {
+			await assetsApi.post("/", newAsset)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['assets']})
+		},
+		onError: (error) => {
+			console.log(error.message)
+		}
+	})
 
 	if (isLoading) return <div>Loading data...</div>
 	if (error) return <div>Failed fetching data</div>
@@ -174,7 +179,7 @@ export default function AssetsPage() {
 		 (e: ChangeEvent<HTMLInputElement>) => {
   			setNewAsset(prev => ({
     	  		...prev,
-    	  		id: e.target.value // Correctly updates the specific key based on input 'name' attribute
+    	  		id: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
   	  	}))
 		}}
 		/>
@@ -198,10 +203,21 @@ export default function AssetsPage() {
 		 (e: ChangeEvent<HTMLInputElement>) => {
   			setNewAsset(prev => ({
     	  		...prev,
-    	  		count: e.target.value // Correctly updates the specific key based on input 'name' attribute
+    	  		count: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
   	  	}))
 		}}
 		/>
+	      </td>
+	       
+	      <td>
+	        <button
+		  onClick={() => saveNewAsset()}
+		>
+		  <span className="material-symbols-outlined text-sm">
+		    save
+		  </span>
+		  Save
+		</button>
 	      </td>
 	    </tr>
               {data?.map((asset, i) => (
