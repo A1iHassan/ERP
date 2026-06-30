@@ -10,6 +10,7 @@ interface Assets {
 
 export default function AssetsPage() {
 	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
+	console.log(newAsset)
 	const [adding, setAdding] = useState<boolean>(false)
 
 	const {data, isLoading, error} = useQuery<Assets[], Error>({
@@ -19,6 +20,13 @@ export default function AssetsPage() {
 			return response.data
 		}
 	})
+
+	const handleInputChange = (e: ChangeEvent<HTMLInputElement>, key: string) => {
+  	setNewAsset(prev => ({
+    	  ...prev,
+    	  [key]: e.value // Correctly updates the specific key based on input 'name' attribute
+  	  }));
+	};
 
 	if (isLoading) return <div>Loading data...</div>
 	if (error) return <div>Failed fetching data</div>
@@ -48,7 +56,7 @@ export default function AssetsPage() {
 	  className="px-5 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-dim transition-all flex items-center gap-2 text-sm shadow-md shadow-primary/20"
 	  onClick={() => {setAdding(prev => !prev)}}
 	  >
-	  {
+	{
 	    adding
 	    ? ("Cancel")
             : 
@@ -161,15 +169,39 @@ export default function AssetsPage() {
 	    <tr className={adding ? "table-row" : "hidden"}>
 	      <td>
 	        <label htmlFor="assetId"> ID </label>
-	        <input type="number" name="assetId" id="assetId"/>
+	        <input type="number" name="id" id="assetId"
+		onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		id: e.target.value // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
 	      </td>
 	      <td>
 	        <label htmlFor="assetName"> Name </label>
-		<input type="text" name="assetName" id="assetName" />
+		<input type="text" name="name" id="assetName" 
+		 onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		name: e.target.value // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
 	      </td>
 	      <td>
 	        <label htmlFor="assetCount"> Count </label>
-		<input type="number" name="assetCount" id="assetCount" />
+		<input type="number" name="count" id="assetCount" 
+		 onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		count: e.target.value // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
 	      </td>
 	    </tr>
               {data?.map((asset, i) => (
