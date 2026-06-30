@@ -7,6 +7,7 @@ import CustomizationPage from "./pages/CustomizationPage";
 import SettingsPage from "./pages/SettingsPage";
 import Sales from "./pages/sales";
 
+
 export default function App() {
   return (
     <Routes>
