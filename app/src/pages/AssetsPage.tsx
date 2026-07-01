@@ -246,7 +246,7 @@ export default function AssetsPage() {
                     </span>
                   </td>
 		  <td>
-		    <span className="material-symbols-outlined">
+		    <span className="material-symbols-outlined p-2 rounded hover:bg-slate-300 cursor-pointer transition-colors duration-200">
 		      more_vert
 		    </span>
 		  </td>
