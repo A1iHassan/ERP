@@ -168,25 +168,17 @@ export default function AssetsPage() {
                 <th className="px-6 py-4 text-[11px] font-black uppercase tracking-wider text-on-surface-variant">
                  Count
                 </th>
+		<th className="px-6 py-4 text-[11px] font-black uppercase tracking-wider text-on-surface-variant w-10">
+		  Action
+		</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-surface-container-low">
-	    <tr className={adding ? "table-row" : "hidden"}>
-	      <td>
-	        <label htmlFor="assetId"> ID </label>
-	        <input type="number" name="id" id="assetId"
-		onChange={
-		 (e: ChangeEvent<HTMLInputElement>) => {
-  			setNewAsset(prev => ({
-    	  		...prev,
-    	  		id: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
-  	  	}))
-		}}
-		/>
-	      </td>
-	      <td>
-	        <label htmlFor="assetName"> Name </label>
+	    <tr className={adding ? `table-row  hover:bg-surface transition-colors bg-surface-container-low/30` : "hidden"}>
+	      
+	      <td  className="px-8 py-4">
 		<input type="text" name="name" id="assetName" 
+		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1"
 		 onChange={
 		 (e: ChangeEvent<HTMLInputElement>) => {
   			setNewAsset(prev => ({
@@ -196,9 +188,21 @@ export default function AssetsPage() {
 		}}
 		/>
 	      </td>
-	      <td>
-	        <label htmlFor="assetCount"> Count </label>
+	      <td className="px-6 py-4" >
+	        <input type="number" name="id" id="assetId"
+		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-40"
+		onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		id: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
+	      </td>
+	      <td  className="px-6 py-4">
 		<input type="number" name="count" id="assetCount" 
+		 className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-20"
 		 onChange={
 		 (e: ChangeEvent<HTMLInputElement>) => {
   			setNewAsset(prev => ({
@@ -209,14 +213,13 @@ export default function AssetsPage() {
 		/>
 	      </td>
 	       
-	      <td>
+	      <td  className="px-8 py-4">
 	        <button
 		  onClick={() => saveNewAsset()}
 		>
 		  <span className="material-symbols-outlined text-sm">
 		    save
 		  </span>
-		  Save
 		</button>
 	      </td>
 	    </tr>
@@ -242,6 +245,11 @@ export default function AssetsPage() {
                       {asset.count}
                     </span>
                   </td>
+		  <td>
+		    <span className="material-symbols-outlined">
+		      more_vert
+		    </span>
+		  </td>
                 </tr>
               ))}
             </tbody>
