@@ -10,6 +10,7 @@ interface Assets {
 
 export default function AssetsPage() {
 	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
+	const [existingAsset, setExistingAsset] = useState<Assets>({id: 0, name: "", count: 0})
 	const [adding, setAdding] = useState<boolean>(false)
 	const [menu, setMenu] = useState<{id: number, opened: boolean}>({id: 0, opened: false})
 	const queryClient = useQueryClient()
@@ -31,6 +32,18 @@ export default function AssetsPage() {
 		onError: (error) => {
 			console.log(error.message)
 		}
+	})
+
+	const { mutate: editAsset } = useMutation({
+		mutationFn: async () => {
+			await assetsApi.patch("/", existingAsset)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({queryKey: ['assets']})
+		},
+		onError: (error) => {
+			console.log(error.message)
+		},
 	})
 
 	if (isLoading) return <div>Loading data...</div>
@@ -247,12 +260,26 @@ export default function AssetsPage() {
                   </td>
 		  <td className="relative ">
 		   
-		    <div className={`absolute top-9 left-5 bg-red-300 transition-all duration-300 ${menu.opened && menu.id === asset.id ? "block" : "hidden"}`}>
-		     this is the menu 
+		    <div 
+		    className={
+			    `absolute whitespace-nowrap flex flex-col gap-1 p-1 top-10 origin-top-right z-20 right-20 bg-slate-50 border-1 border-slate-300 rounded opacity-0 transition-all duration-300
+			    ${menu.opened && menu.id === asset.id
+				    ? "scale-100 pointer-events-auto opacity-100"
+				    : "scale-0 pointer-events-none"}`}>
+			<button 
+			className="cursor-pointer"
+			onClick={() => {editAsset()}}
+			>Edit</button>
+			<button 
+			className="cursor-pointer"
+			onClick={() => {}} >Delete</button>
+			<button 
+			className="cursor-pointer"
+			onClick={() => {setMenu({id: 0, opened: false})}} >Cancel</button>
 		    </div>
 		    <span 
 		    onClick={() => {setMenu({id: asset.id, opened: true})}}
-		    className="material-symbols-outlined p-2 rounded hover:bg-slate-300 cursor-pointer transition-colors duration-200">
+		    className="material-symbols-outlined p-2 rounded hover:bg-slate-300 cursor-pointer transition-colors duration-200 z-10">
 		      more_vert
 		    </span>
 		  </td>
