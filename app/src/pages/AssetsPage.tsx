@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import assetsApi from "../api/assetsApi";
 
 interface Assets {
@@ -245,11 +245,11 @@ export default function AssetsPage() {
 		{ editing && existingAsset.id === asset.id
 		  ? <>
 		   <td  className="px-8 py-4">
-		<input type="text" name="name" id="assetName" 
+		<input type="text" name="name" id="assetNameEdit" defaultValue={asset.name} 
 		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1"
 		 onChange={
 		 (e: ChangeEvent<HTMLInputElement>) => {
-  			setNewAsset(prev => ({
+  			setExistingAsset(prev => ({
     	  		...prev,
     	  		name: e.target.value // Correctly updates the specific key based on input 'name' attribute
   	  	}))
@@ -257,11 +257,11 @@ export default function AssetsPage() {
 		/>
 	      </td>
 	      <td className="px-6 py-4" >
-	        <input type="number" name="id" id="assetId"
+	        <input type="number" name="id" id="assetIdEdit" defaultValue={asset.id}
 		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-40"
 		onChange={
 		 (e: ChangeEvent<HTMLInputElement>) => {
-  			setNewAsset(prev => ({
+  			setExistingAsset(prev => ({
     	  		...prev,
     	  		id: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
   	  	}))
@@ -269,11 +269,11 @@ export default function AssetsPage() {
 		/>
 	      </td>
 	      <td  className="px-6 py-4">
-		<input type="number" name="count" id="assetCount" 
+		<input type="number" name="count" id="assetCountEdit" defaultValue={asset.count} 
 		 className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-20"
 		 onChange={
 		 (e: ChangeEvent<HTMLInputElement>) => {
-  			setNewAsset(prev => ({
+  			setExistingAsset(prev => ({
     	  		...prev,
     	  		count: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
   	  	}))
@@ -281,12 +281,19 @@ export default function AssetsPage() {
 		/>
 	      </td>
 	       
-	      <td  className="px-8 py-4">
+	      <td  className="px-8 py-4 flex gap-1">
 	        <button
-		  onClick={() => saveNewAsset()}
+		  onClick={() => editAsset()}
 		>
 		  <span className="material-symbols-outlined text-sm">
 		    save
+		  </span>
+		</button>
+	        <button
+		  onClick={() => {setEditing(false); setExistingAsset({id: 0, name: "", count: 0})}}
+		>
+		  <span className="material-symbols-outlined text-sm">
+		   cancel 
 		  </span>
 		</button>
 	      </td>
@@ -320,9 +327,8 @@ export default function AssetsPage() {
 			<button 
 			className="cursor-pointer"
 			onClick={() => {
-				const tmp = {...existingAsset, id: asset.id} 
 				setMenu({id: 0, opened: false})
-				setExistingAsset(tmp)
+				setExistingAsset({id: asset.id, name: asset.name, count: asset.count})
 				setEditing(true)
 			}}
 			>Edit</button>
