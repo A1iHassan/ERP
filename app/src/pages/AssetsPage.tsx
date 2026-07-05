@@ -10,8 +10,8 @@ interface Assets {
 
 export default function AssetsPage() {
 	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
-	console.log(newAsset)
 	const [adding, setAdding] = useState<boolean>(false)
+	const [menu, setMenu] = useState<{id: number, opened: boolean}>({id: 0, opened: false})
 	const queryClient = useQueryClient()
 	const {data, isLoading, error} = useQuery<Assets[], Error>({
 		queryKey: ['assets'],
@@ -245,8 +245,14 @@ export default function AssetsPage() {
                       {asset.count}
                     </span>
                   </td>
-		  <td>
-		    <span className="material-symbols-outlined p-2 rounded hover:bg-slate-300 cursor-pointer transition-colors duration-200">
+		  <td className="relative ">
+		   
+		    <div className={`absolute top-9 left-5 bg-red-300 transition-all duration-300 ${menu.opened && menu.id === asset.id ? "block" : "hidden"}`}>
+		     this is the menu 
+		    </div>
+		    <span 
+		    onClick={() => {setMenu({id: asset.id, opened: true})}}
+		    className="material-symbols-outlined p-2 rounded hover:bg-slate-300 cursor-pointer transition-colors duration-200">
 		      more_vert
 		    </span>
 		  </td>
