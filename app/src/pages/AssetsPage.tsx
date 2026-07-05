@@ -11,6 +11,7 @@ interface Assets {
 export default function AssetsPage() {
 	const [newAsset, setNewAsset] = useState<Assets>({id: 0, name: "", count: 0})
 	const [existingAsset, setExistingAsset] = useState<Assets>({id: 0, name: "", count: 0})
+	const [editing, setEditing] = useState<boolean>(false)
 	const [adding, setAdding] = useState<boolean>(false)
 	const [menu, setMenu] = useState<{id: number, opened: boolean}>({id: 0, opened: false})
 	const queryClient = useQueryClient()
@@ -241,7 +242,57 @@ export default function AssetsPage() {
                   key={i}
                   className={`hover:bg-surface transition-colors ${i % 2 === 1 ? "bg-surface-container-low/30" : ""}`}
                 >
-                  <td className="px-8 py-4">
+		{ editing && existingAsset.id === asset.id
+		  ? <>
+		   <td  className="px-8 py-4">
+		<input type="text" name="name" id="assetName" 
+		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1"
+		 onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		name: e.target.value // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
+	      </td>
+	      <td className="px-6 py-4" >
+	        <input type="number" name="id" id="assetId"
+		className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-40"
+		onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		id: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
+	      </td>
+	      <td  className="px-6 py-4">
+		<input type="number" name="count" id="assetCount" 
+		 className="bg-white rounded outline-none focus:ring-2 focus:ring-slate-400 px-2 py-1 w-20"
+		 onChange={
+		 (e: ChangeEvent<HTMLInputElement>) => {
+  			setNewAsset(prev => ({
+    	  		...prev,
+    	  		count: Number(e.target.value) // Correctly updates the specific key based on input 'name' attribute
+  	  	}))
+		}}
+		/>
+	      </td>
+	       
+	      <td  className="px-8 py-4">
+	        <button
+		  onClick={() => saveNewAsset()}
+		>
+		  <span className="material-symbols-outlined text-sm">
+		    save
+		  </span>
+		</button>
+	      </td>
+		  </>
+                  : <>
+		    <td className="px-8 py-4">
                     <div className="flex items-center gap-3">
                         <p className="text-sm font-bold text-on-surface">
                           {asset.name}
@@ -268,7 +319,12 @@ export default function AssetsPage() {
 				    : "scale-0 pointer-events-none"}`}>
 			<button 
 			className="cursor-pointer"
-			onClick={() => {editAsset()}}
+			onClick={() => {
+				const tmp = {...existingAsset, id: asset.id} 
+				setMenu({id: 0, opened: false})
+				setExistingAsset(tmp)
+				setEditing(true)
+			}}
 			>Edit</button>
 			<button 
 			className="cursor-pointer"
@@ -283,6 +339,8 @@ export default function AssetsPage() {
 		      more_vert
 		    </span>
 		  </td>
+		  </>
+		}
                 </tr>
               ))}
             </tbody>
