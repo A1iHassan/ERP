@@ -1,3 +1,5 @@
+CREATE TYPE USER_ROLE AS ENUM ('super-admin', 'admin', 'previliged', 'user');
+
 CREATE TABLE categories ( 
     id INT PRIMARY KEY, 
     name TEXT
@@ -38,4 +40,34 @@ CREATE TABLE assets (
     FOREIGN KEY (status_id) REFERENCES status(id),
     FOREIGN KEY (icon_id) REFERENCES icons(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+CREATE TABLE roles (
+	id INT PRIMARY KEY,
+	name TEXT,
+	user_level USER_ROLE
+);
+
+CREATE TABLE permissions (
+	id INT PRIMARY KEY,
+	name TEXT
+);
+
+CREATE TABLE role_permission (
+	id INT PRIMARY KEY,
+	role_id INT,
+	permission_id INT,
+	FOREIGN KEY (role_id) REFERENCES roles(id),
+	FOREIGN KEY (permission_id) REFERENCES permissions(id)
+);
+
+CREATE TABLE users (
+	id INT PRIMARY KEY,
+	name TEXT,
+	email TEXT,
+	password TEXT,
+	created_at TIMESTAMPTZ,
+	updated_at TIMESTAMPTZ,
+	role_id INT,
+	FOREIGN KEY (role_id) REFERENCES roles(id)
 );
