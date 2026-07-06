@@ -31,6 +31,7 @@ func main() {
 	}
 
 	repo := &repositories.DBRepository{Db: pool}
+	authSvc := &services.AuthService{Repo: repo}
 	svc := &services.AssetsService{Repo: repo}
 	handler := &handlers.AssetsHandler{Svc: *svc}
 

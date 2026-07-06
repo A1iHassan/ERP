@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"main/internal/models"
 	"net/http"
+	"main/internal/services"
 )
 
 type AuthHadler struct {
-	svc AuthService
+	svc services.AuthService
 }
 
 func (a *AuthHadler) HandleLogin(w http.ResponseWriter, r *http.Request) {
@@ -55,4 +56,6 @@ func (a *AuthHadler) HandleSighUp(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errrorMessage, http.StatusUnprocessableEntity)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }

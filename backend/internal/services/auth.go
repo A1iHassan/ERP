@@ -10,7 +10,12 @@ import (
 )
 
 type AuthService struct {
-	repo repositories.AuthRepository
+	Repo repositories.AuthRepository
+}
+
+func (a *AuthService) LoginService(ctx context.Context, payload models.LoginUser) error {
+
+	return nil
 }
 
 func (a *AuthService) SignUpService(ctx context.Context, payload models.SignUpUser) error {
@@ -25,7 +30,7 @@ func (a *AuthService) SignUpService(ctx context.Context, payload models.SignUpUs
 	hashedUser.Email = payload.Email
 	hashedUser.Password = string(bytes)
 
-	if err = a.repo.RegisterUser(ctx, hashedUser); err != nil {
+	if err = a.Repo.RegisterUser(ctx, hashedUser); err != nil {
 		return fmt.Errorf("Couldn't register user due to error: %v\n", err)
 	}
 
