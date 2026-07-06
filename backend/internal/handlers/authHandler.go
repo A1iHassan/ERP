@@ -50,4 +50,9 @@ func (a *AuthHadler) HandleSighUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := a.svc.SignUpService(ctx, user); err != nil {
+		errrorMessage := fmt.Sprintf("Couldn't sign up user due to error: %v\n", err)
+		http.Error(w, errrorMessage, http.StatusUnprocessableEntity)
+		return
+	}
 }

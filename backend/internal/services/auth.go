@@ -13,15 +13,20 @@ type AuthService struct {
 	repo repositories.AuthRepository
 }
 
-func (s *AuthService) LoginService(ctx context.Context, payload models.LoginUser) error {
+func (a *AuthService) SignUpService(ctx context.Context, payload models.SignUpUser) error {
+	var hashedUser models.SignUpUser
 
-	bytes, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost) // this needs to be changed to Compage instead of Generate
+	bytes, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return fmt.Errorf("Something went wrong with log in due to the following:\n %v", err)
+		return fmt.Errorf("Password Error")
 	}
 
-	if err := s.repo.LogUser(ctx, payload); err != nil {
-		return fmt.Errorf("%v\n", err)
+	hashedUser.Name = payload.Name
+	hashedUser.Email = payload.Email
+	hashedUser.Password = string(bytes)
+
+	if err = a.repo.RegisterUser(ctx, hashedUser); err != nil {
+		return fmt.Errorf("Couldn't register user due to error: %v\n", err)
 	}
 
 	return nil
