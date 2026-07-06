@@ -9,7 +9,7 @@ import (
 )
 
 type AuthHadler struct {
-	svc services.AuthService
+	Svc services.AuthService
 }
 
 func (a *AuthHadler) HandleLogin(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +27,7 @@ func (a *AuthHadler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := a.svc.LoginService(ctx, user); err != nil {
+	if err := a.Svc.LoginService(ctx, user); err != nil {
 		errrorMessage := fmt.Sprintf("Couldn't log in due to error: %v\n", err)
 		http.Error(w, errrorMessage, http.StatusUnauthorized)
 		return
@@ -51,7 +51,7 @@ func (a *AuthHadler) HandleSighUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := a.svc.SignUpService(ctx, user); err != nil {
+	if err := a.Svc.SignUpService(ctx, user); err != nil {
 		errrorMessage := fmt.Sprintf("Couldn't sign up user due to error: %v\n", err)
 		http.Error(w, errrorMessage, http.StatusUnprocessableEntity)
 		return
