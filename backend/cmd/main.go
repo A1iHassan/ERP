@@ -33,13 +33,13 @@ func main() {
 	repo := &repositories.DBRepository{Db: pool}
 	authSvc := &services.AuthService{Repo: repo}
 	authHandler := &handlers.AuthHadler{Svc: *authSvc}
-	svc := &services.AssetsService{Repo: repo}
-	handler := &handlers.AssetsHandler{Svc: *svc}
+	assetSvc := &services.AssetsService{Repo: repo}
+	assetHandler := &handlers.AssetsHandler{Svc: *assetSvc}
 
-	mux.HandleFunc("GET /", handler.HandleGetAssets)
-	mux.HandleFunc("POST /", handler.HandlePostAssets)
-	mux.HandleFunc("PATCH /", handler.HandlePatchAssets)
-	mux.HandleFunc("DELETE /{id}", handler.HandleDeleteAssets)
+	mux.HandleFunc("GET /", assetHandler.HandleGetAssets)
+	mux.HandleFunc("POST /", assetHandler.HandlePostAssets)
+	mux.HandleFunc("PATCH /", assetHandler.HandlePatchAssets)
+	mux.HandleFunc("DELETE /{id}", assetHandler.HandleDeleteAssets)
 	mux.HandleFunc("POST /signup", authHandler.HandleSighUp)
 
 	corsHandler := middleware.CORS(mux)
