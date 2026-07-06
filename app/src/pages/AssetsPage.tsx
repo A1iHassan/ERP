@@ -46,6 +46,17 @@ export default function AssetsPage() {
 			console.log(error.message)
 		},
 	})
+	const { mutate: deleteAsset } = useMutation({
+		mutationFn: async (id: number) => {
+			await assetsApi.delete(`/${id}`)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({queryKey: ['assets']})
+		},
+		onError: (error) => {
+			console.log(error.message)
+		},
+	})
 
 	if (isLoading) return <div>Loading data...</div>
 	if (error) return <div>Failed fetching data</div>
@@ -334,7 +345,7 @@ export default function AssetsPage() {
 			>Edit</button>
 			<button 
 			className="cursor-pointer"
-			onClick={() => {}} >Delete</button>
+			onClick={() => {deleteAsset(asset.id)}} >Delete</button>
 			<button 
 			className="cursor-pointer"
 			onClick={() => {setMenu({id: 0, opened: false})}} >Cancel</button>
