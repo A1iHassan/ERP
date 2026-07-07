@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"github.com/jackc/pgx/v5/pgconn"
+	"errors"
 	"math/big"
 	"crypto/rand"
 	"context"
@@ -27,8 +29,13 @@ func (d *DBRepository) RegisterUser(ctx context.Context, payload models.SignUpUs
 		return err
 	}
 	id := n.Int64() + 1000000
-	if _, err := d.Db.Exec(ctx, "INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4);", id, payload.Name, payload.Email, payload.Password); err != nil {
-		return fmt.Errorf("Failed to register user due to error: %v\n", err)
+	_, err = d.Db.Exec(ctx, "INSERT INTO users (id, name, email, password) VALUES ($1, $2, $3, $4);", id, payload.Name, payload.Email, payload.Password);
+	 if err != nil {
+		var insertError *pgconn.PgError
+		if errors.As(err, &insertError) && insertError.Code == "23505" {
+			return fmt.Errorf("User ID of name already exists in database")
+		}
+		return fmt.Errorf("Couldn't register user due to error: %w", err)
 	}
 
 	return nil
