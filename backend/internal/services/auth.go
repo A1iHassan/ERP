@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"crypto/ed25519"
+	"crypto/rand"
 	"fmt"
 	"main/internal/models"
 	"main/internal/repositories"
@@ -43,7 +45,9 @@ func (a *AuthService) LoginService(ctx context.Context, payload models.LoginUser
 
 	token := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claimsObject)
 
-	signedToken, err := token.SignedString("AHA")
+	_, privateKey, err := ed25519.GenerateKey(rand.Reader)
+
+	signedToken, err := token.SignedString(privateKey)
 	if err != nil {
 		return "", err
 	}
