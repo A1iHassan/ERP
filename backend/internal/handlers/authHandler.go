@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"main/internal/models"
@@ -72,4 +73,19 @@ func (a *AuthHadler) HandleSighUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (a *AuthHadler) HandleMe(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	cookie, err := r.Cookie("access_token")
+	if err != nil {
+		http.Error(w, "No credentials", http.StatusUnauthorized)
+		return
+	}
+
+	if err = a.Svc.ValidateToken(ctx, cookie); err != nil {
+		http.Error(w, "Unauthorized user", http.StatusUnauthorized)
+		return
+	}
 }

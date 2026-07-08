@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"main/internal/models"
 	"main/internal/repositories"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -70,6 +71,11 @@ func (a *AuthService) SignUpService(ctx context.Context, payload models.SignUpUs
 	if err = a.Repo.RegisterUser(ctx, hashedUser); err != nil {
 		return fmt.Errorf("Couldn't register user due to error: %v\n", err)
 	}
+
+	return nil
+}
+
+func (a AuthService) ValidateToken(ctx context.Context, cookie *http.Cookie) error {
 
 	return nil
 }
