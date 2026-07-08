@@ -14,7 +14,9 @@ type AuthService struct {
 }
 
 func (a *AuthService) LoginService(ctx context.Context, payload models.LoginUser) error {
-
+	if err := a.Repo.LogUser(ctx, payload); err != nil {
+		return err
+	}
 	return nil
 }
 

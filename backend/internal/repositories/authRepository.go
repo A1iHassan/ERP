@@ -17,6 +17,11 @@ type AuthRepository interface {
 
 
 func (d *DBRepository) LogUser(ctx context.Context, payload models.LoginUser) error {
+	var name, email, hashedPass string
+	err := d.Db.QueryRow(ctx, "SELECT (name, email, password) FROM users WHERE email = $1;", payload.Email).Scan(&name, &email, &hashedPass)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
