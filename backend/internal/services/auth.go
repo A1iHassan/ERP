@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"main/internal/models"
 	"main/internal/repositories"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,11 +15,40 @@ type AuthService struct {
 	Repo repositories.AuthRepository
 }
 
-func (a *AuthService) LoginService(ctx context.Context, payload models.LoginUser) error {
-	if err := a.Repo.LogUser(ctx, payload); err != nil {
-		return err
+func (a *AuthService) LoginService(ctx context.Context, payload models.LoginUser) (string, error) {
+	password, err := a.Repo.GetPassword(ctx, payload.Email, payload.Name)
+	if err != nil {
+		return "", err
 	}
-	return nil
+
+	err = bcrypt.CompareHashAndPassword([]byte(password), []byte(payload.Password))
+	if err != nil {
+		return "", fmt.Errorf("Wrong password")
+	}
+
+	expiration := time.Now().Add(15 * time.Minute)
+	
+	claimsObject := struct {
+		Name string `json:"name"`
+		Email string `json:"email"`
+		jwt.RegisteredClaims
+	}{
+		Name: payload.Name,
+		Email: payload.Email,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expiration),
+			Issuer: "me",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claimsObject)
+
+	signedToken, err := token.SignedString("AHA")
+	if err != nil {
+		return "", err
+	}
+
+	return signedToken, nil
 }
 
 func (a *AuthService) SignUpService(ctx context.Context, payload models.SignUpUser) error {

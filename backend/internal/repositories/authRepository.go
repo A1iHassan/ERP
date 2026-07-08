@@ -11,20 +11,19 @@ import (
 )
 
 type AuthRepository interface {
-	LogUser(ctx context.Context, payload models.LoginUser) error
 	RegisterUser(ctx context.Context, payload models.SignUpUser) error
+	GetPassword(ctx context.Context, email, name string) (string, error)
 }
 
-
-func (d *DBRepository) LogUser(ctx context.Context, payload models.LoginUser) error {
-	var name, email, hashedPass string
-	err := d.Db.QueryRow(ctx, "SELECT (name, email, password) FROM users WHERE email = $1;", payload.Email).Scan(&name, &email, &hashedPass)
-	if err != nil {
-		return err
+func (d *DBRepository) GetPassword(ctx context.Context, email, name string) (string, error) {
+	var password string
+	if err := d.Db.QueryRow(ctx, "SELECT (password) FROM users WHERE email = $1 AND name = $2;", email, name).Scan(&password); err != nil {
+		return "", err 
 	}
 
-	return nil
+	return password, nil
 }
+
 
 func (d *DBRepository) RegisterUser(ctx context.Context, payload models.SignUpUser) error {
 

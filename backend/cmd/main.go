@@ -41,6 +41,7 @@ func main() {
 	mux.HandleFunc("PATCH /", assetHandler.HandlePatchAssets)
 	mux.HandleFunc("DELETE /{id}", assetHandler.HandleDeleteAssets)
 	mux.HandleFunc("POST /signup", authHandler.HandleSighUp)
+	mux.HandleFunc("POST /login", authHandler.HandleLogin)
 
 	corsHandler := middleware.CORS(mux)
 

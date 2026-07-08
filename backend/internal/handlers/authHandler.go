@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"main/internal/models"
-	"net/http"
 	"main/internal/services"
+	"net/http"
+	"time"
 )
 
 type AuthHadler struct {
@@ -27,13 +28,26 @@ func (a *AuthHadler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := a.Svc.LoginService(ctx, user); err != nil {
+	signedToken, err := a.Svc.LoginService(ctx, user);
+
+	if  err != nil {
 		errrorMessage := fmt.Sprintf("Couldn't log in due to error: %v\n", err)
 		http.Error(w, errrorMessage, http.StatusUnauthorized)
 		return
 	}
 
+	cookie := &http.Cookie{
+		Name: "access_token",
+		Value: signedToken,
+		Expires: time.Now().Add(time.Minute * 15),
+		HttpOnly: true,
+		Secure: true,
+		SameSite: http.SameSiteStrictMode,
+	}
 
+	http.SetCookie(w, cookie)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"message", "Logged in"}`))
 }
 
 func (a *AuthHadler) HandleSighUp(w http.ResponseWriter, r *http.Request) {
