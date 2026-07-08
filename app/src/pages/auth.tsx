@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const Auth = () => {
 	const [auth, setAuth] = useState<"login" | "signup">("login")
-	return <form action="submit"
+	return <form
 	    className="flex flex-col items-center justify-center"
 	  >
 	  <label htmlFor="name">Name</label>
@@ -20,14 +20,16 @@ const Auth = () => {
 	    className=""
 	    onChange={() => {}}
 	  />
-	  <button onSubmit={(e) => {
+	  <button onClick={(e) => {
 		  e.preventDefault()
-	  }}>
+	  }}
+	    className="cursor-pointer"
+	  >
 	    {auth === "login" ? "Log in" : "Sign up"}
 	  </button>
 
 	  <span className="">
-	    {auth === "login" ? "Don't have an account?" : "Already have an account?"}
+	    {auth === "login" ? "Don't have an account? " : "Already have an account? "}
 	    <span className="cursor-pointer"
 	      onClick={() => {setAuth(prev => prev === "login" ? "signup" : "login")}}
 	    >
