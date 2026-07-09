@@ -10,10 +10,11 @@ const Protected = () => {
 				withCredentials: true,
 			})
 			console.log(response.data)
+			return response
 		}
 	})
 	if (isLoading) return <div>Checking user data...</div>
-	return data ? <Outlet /> : <Navigate to="/auth" replace />
+	return data?.status === 200 ? <Outlet /> : <Navigate to="/auth" replace />
 }
 
 export default Protected;
