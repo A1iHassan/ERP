@@ -30,8 +30,8 @@ func main() {
 
 	r := chi.NewRouter()
 
-	userRepository := &repositories.DBRepository{Db: pool}
-	userService := &services.UserService{Repo: userRepository}
+	dbRepository := &repositories.DBRepository{Db: pool}
+	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
 
 	r.Route("/users", func(r chi.Router) {
