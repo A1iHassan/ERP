@@ -10,7 +10,7 @@ type UserService struct {
 	Repo *repositories.DBRepository 
 }
 
-func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.UserDTO) {
+func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.GetUsersDTO) {
 	return s.Repo.Get(ctx)
 }
 

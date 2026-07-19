@@ -11,8 +11,8 @@ type UserRepository interface {
 	Create(ctx context.Context) error
 }
 
-func (p *DBRepository) Get(ctx context.Context) (error, []models.UserDTO) {
-	var users []models.UserDTO
+func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
+	var users []models.GetUsersDTO
 	usersQuery, err := p.Db.Query(ctx, "SELECT name, email FROM users;")
 	if err != nil {
 		return fmt.Errorf("Internal server error"), nil
@@ -20,7 +20,7 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.UserDTO) {
 	defer usersQuery.Close()
 
 	for usersQuery.Next() {
-		var user models.UserDTO
+		var user models.GetUsersDTO
 		if err := usersQuery.Scan(&user.Name, &user.Email); err != nil {
 			return fmt.Errorf("Internal server error at user level"), nil
 		}
