@@ -15,7 +15,7 @@ CREATE TABLE assets (
 );
 
 CREATE TABLE permissions (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT,
     icon_id UUID,
     FOREIGN KEY (icon_id) REFERENCES icons(id)
