@@ -36,6 +36,7 @@ func main() {
 
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", userHandler.GetAllUsers)
+		r.Get("/{id}", userHandler.GetOneUser)
 	})
 
 	http.ListenAndServe(":8080", r)

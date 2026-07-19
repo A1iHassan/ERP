@@ -4,10 +4,13 @@ import (
 	"backend/internal/models"
 	"context"
 	"fmt"
+
+	"github.com/google/uuid"
 )
 
 type UserRepository interface {
-	Get(ctx context.Context) (error, string)
+	Get(ctx context.Context) (error, []models.GetUsersDTO)
+	GetOne(ctx context.Context, userId uuid.UUID) (error, models.SingleUserDTO)
 	Create(ctx context.Context) error
 }
 
@@ -35,3 +38,6 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 	return nil, users
 }
 
+func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
+	return nil, nil
+}

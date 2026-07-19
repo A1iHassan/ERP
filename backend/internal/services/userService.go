@@ -4,6 +4,8 @@ import (
 	"backend/internal/models"
 	"backend/internal/repositories"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type UserService struct {
@@ -14,3 +16,6 @@ func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.G
 	return s.Repo.Get(ctx)
 }
 
+func (s *UserService) GetSingleUser(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
+	return s.Repo.
+}
