@@ -4,7 +4,6 @@ import (
 	"backend/internal/models"
 	"backend/internal/repositories"
 	"context"
-	"fmt"
 )
 
 type UserService struct {
