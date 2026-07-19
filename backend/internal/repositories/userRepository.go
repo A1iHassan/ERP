@@ -7,6 +7,7 @@ import (
 
 type UserRepository interface {
 	Get(ctx context.Context) (error, string)
+	Create(ctx context.Context) error
 }
 
 func (p *DBRepository) Get(ctx context.Context) (error, string) {

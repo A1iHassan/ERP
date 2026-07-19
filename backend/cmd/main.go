@@ -17,14 +17,14 @@ func main() {
 
 	pool, err := pgxpool.New(ctx, "postgres://aha:aliPass@localhost:5432/erp")
 	if err != nil {
-		fmt.Errorf("Failed to create db pool due to error: %v", err)
+		fmt.Printf("Failed to create db pool due to error: %v", err)
 		return
 	}
 
 	defer pool.Close()
 
 	if err = pool.Ping(ctx); err != nil {
-		fmt.Errorf("Database not reachable due to error: %v", err)
+		fmt.Printf("Database not reachable due to error: %v", err)
 		return
 	}
 
