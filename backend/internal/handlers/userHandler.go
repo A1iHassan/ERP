@@ -4,6 +4,9 @@ import (
 	"backend/internal/services"
 	"encoding/json"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -26,4 +29,22 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *UserHandler) GetOneUser(w http.ResponseWriter, r *http.Request) {}
+func (h *UserHandler) GetOneUser(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+
+	userId, err := uuid.Parse(param)
+	if err != nil {
+		http.Error(w, "invalid url param", http.StatusBadRequest)
+	}
+
+	err, user := h.Svc.GetSingleUser(ctx, userId)
+	if err != nil {
+		http.Error(w, "user not found", http.StatusNotFound)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
+
+	if err = json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
+}

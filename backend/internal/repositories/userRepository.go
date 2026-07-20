@@ -38,6 +38,6 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 	return nil, users
 }
 
-func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
-	return nil, nil
-}
+//func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
+//	
+//}
