@@ -32,7 +32,6 @@ func (s *UserService) RegisterUser(ctx context.Context, userData models.CreateUs
 		Email: userData.Email,
 		Password: string(bytes),
 		Role: userData.Role,
-		Permissions: userData.Permissions,
 	}
 	
 	return s.Repo.Create(ctx, payload)

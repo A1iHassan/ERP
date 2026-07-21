@@ -20,6 +20,5 @@ type CreateUserDTO struct {
 	Name        string   `json:"name"`
 	Email       string   `json:"email"`
 	Role        string   `json:"role"`
-	Permissions []string `json:"permissions"`
 	Password    string    `json:"password"`
 }

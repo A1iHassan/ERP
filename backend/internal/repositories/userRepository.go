@@ -56,8 +56,10 @@ func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, mod
 }
 
 func (p *DBRepository) Create(ctx context.Context, payload models.CreateUserDTO) error {
-
-	if _, err := p.Db.Exec(ctx, "INSERT INTO users"); err != nil {
+	if _, err := p.Db.Exec(ctx, `
+	INSERT INTO users (name, email, password, role_id)
+	VALUES ($1, $2, $3, (SELECT id FROM roles WHERE name = $4));
+	`, payload.Name, payload.Email, payload.Password, payload.Role); err != nil {
 		return err
 	}
 	return nil
