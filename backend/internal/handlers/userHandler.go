@@ -3,6 +3,7 @@ package handlers
 import (
 	"backend/internal/services"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -40,7 +41,9 @@ func (h *UserHandler) GetOneUser(w http.ResponseWriter, r *http.Request) {
 
 	err, user := h.Svc.GetSingleUser(ctx, userId)
 	if err != nil {
-		http.Error(w, "user not found", http.StatusNotFound)
+		message := fmt.Sprintf("%v\n", err)
+		http.Error(w, message, http.StatusNotFound)
+		return
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)

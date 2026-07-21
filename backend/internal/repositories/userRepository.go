@@ -41,16 +41,16 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
 	var user models.SingleUserDTO
 
-	if err := p.Db.QueryRow(ctx, `SELECT users.id users.name, users.email, roles.name 
+	if err := p.Db.QueryRow(ctx, `SELECT users.id, users.name, users.email, roles.name, 
 				      COALESCE (json_agg(permissions.name), '[]'::json) 
 				      FROM users 
-				      JOIN roles ON users.role_id = roles.id 
+				      LEFT JOIN roles ON users.role_id = roles.id 
 				      LEFT JOIN role_permission ON users.role_id = role_permission.role_id 
 				      LEFT JOIN permissions ON role_permission.permission_id = permissions.id 
 				      WHERE users.id = $1
-				      GROUP BY users.name, users.email, roles.name`, 
-				      userid).Scan(&user); err != nil {
-		return fmt.Errorf("Unable to query userr"), user
+				      GROUP BY users.id, users.name, users.email, roles.name`, 
+				      userid).Scan(&user.Id, &user.Name, &user.Email, &user.Role, &user.Permissions); err != nil {
+		return fmt.Errorf("%v", err), user
 	}
 
 	return nil, user
