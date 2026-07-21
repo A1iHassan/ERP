@@ -17,8 +17,14 @@ type SingleUserDTO struct {
 }
 
 type CreateUserDTO struct {
-	Name        string   `json:"name"`
-	Email       string   `json:"email"`
-	Role        string   `json:"role"`
-	Password    string    `json:"password"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Role     string `json:"role"`
+	Password string `json:"password"`
+}
+
+type UpdateUserDTO struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password,omitempty"`
 }

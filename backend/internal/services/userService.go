@@ -36,3 +36,7 @@ func (s *UserService) RegisterUser(ctx context.Context, userData models.CreateUs
 	
 	return s.Repo.Create(ctx, payload)
 }
+
+func (s *UserService) UpdateUser(ctx context.Context, payload models.UpdateUserDTO) error {
+	return nil
+}

@@ -38,6 +38,7 @@ func main() {
 		r.Get("/", userHandler.GetAllUsers)
 		r.Get("/{id}", userHandler.GetOneUser)
 		r.Post("/", userHandler.CreateUser)
+		r.Patch("/", userHandler.UpdateExistingUser)
 	})
 
 	http.ListenAndServe(":8080", r)

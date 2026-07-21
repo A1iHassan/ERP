@@ -58,6 +58,11 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	defer r.Body.Close()
 
+	if r.Header.Get("Content-Type") != "application/json" {
+		http.Error(w, "Invalid payload", http.StatusBadRequest)
+		return
+	}
+
 	var payload models.CreateUserDTO
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "Invalid payload", http.StatusBadRequest)
@@ -71,4 +76,28 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+func (h *UserHandler) UpdateExistingUser(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	defer r.Body.Close()
+
+	if r.Header.Get("Content-Type") != "application/json" {
+		http.Error(w, "Invalid payload", http.StatusBadRequest)
+		return
+	}
+
+	var payload models.UpdateUserDTO
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		message := fmt.Sprintf("parse error: %v", err)
+		http.Error(w, message, http.StatusBadRequest)
+		return
+	}
+
+	if err := h.Svc.UpdateUser(ctx, payload); err != nil {
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
