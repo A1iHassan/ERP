@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"backend/internal/models"
 	"backend/internal/services"
 	"encoding/json"
 	"fmt"
@@ -51,4 +52,23 @@ func (h *UserHandler) GetOneUser(w http.ResponseWriter, r *http.Request) {
 	if err = json.NewEncoder(w).Encode(user); err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 	}
+}
+
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	defer r.Body.Close()
+
+	var payload models.CreateUserDTO
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "Invalid payload", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.Svc.RegisterUser(ctx, payload); err != nil {
+		message := fmt.Sprintf("Can't create user due to error: %v", err)
+		http.Error(w, message, http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }

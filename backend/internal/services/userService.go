@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -18,4 +19,21 @@ func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.G
 
 func (s *UserService) GetSingleUser(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
 	return s.Repo.GetOne(ctx, userid)
+}
+
+func (s *UserService) RegisterUser(ctx context.Context, userData models.CreateUserDTO) error {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(userData.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	payload := models.CreateUserDTO{
+		Name: userData.Name,
+		Email: userData.Email,
+		Password: string(bytes),
+		Role: userData.Role,
+		Permissions: userData.Permissions,
+	}
+	
+	return s.Repo.Create(ctx, payload)
 }

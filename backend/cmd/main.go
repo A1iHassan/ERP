@@ -37,6 +37,7 @@ func main() {
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", userHandler.GetAllUsers)
 		r.Get("/{id}", userHandler.GetOneUser)
+		r.Post("/", userHandler.CreateUser)
 	})
 
 	http.ListenAndServe(":8080", r)

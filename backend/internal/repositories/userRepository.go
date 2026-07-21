@@ -4,7 +4,6 @@ import (
 	"backend/internal/models"
 	"context"
 	"fmt"
-
 	"github.com/google/uuid"
 )
 
@@ -54,4 +53,12 @@ func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, mod
 	}
 
 	return nil, user
+}
+
+func (p *DBRepository) Create(ctx context.Context, payload models.CreateUserDTO) error {
+
+	if _, err := p.Db.Exec(ctx, "INSERT INTO users"); err != nil {
+		return err
+	}
+	return nil
 }
