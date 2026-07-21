@@ -11,6 +11,7 @@ type UserRepository interface {
 	Get(ctx context.Context) (error, []models.GetUsersDTO)
 	GetOne(ctx context.Context, userId uuid.UUID) (error, models.SingleUserDTO)
 	Create(ctx context.Context) error
+	Update(ctx context.Context, payload models.UpdateUserDTO) error
 }
 
 func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
@@ -62,5 +63,14 @@ func (p *DBRepository) Create(ctx context.Context, payload models.CreateUserDTO)
 	`, payload.Name, payload.Email, payload.Password, payload.Role); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (p *DBRepository) Update(ctx context.Context, payload models.UpdateUserDTO) error {
+	_, err := p.Db.Exec(ctx, `UPDATE users SET name = $1, email = $2 WHERE email = $3;`, payload.Name, payload.Email, payload.Email)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
