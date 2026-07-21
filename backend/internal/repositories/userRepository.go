@@ -76,5 +76,9 @@ func (p *DBRepository) Update(ctx context.Context, payload models.UpdateUserDTO)
 }
 
 func (p *DBRepository) Delete(ctx context.Context, userId uuid.UUID) error {
+	_, err := p.Db.Exec(ctx, "DELETE FROM users WHERE id = $1", userId)
+	if err != nil {
+		return err
+	}
 	return nil
 }
