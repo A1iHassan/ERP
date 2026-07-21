@@ -74,3 +74,7 @@ func (p *DBRepository) Update(ctx context.Context, payload models.UpdateUserDTO)
 
 	return nil
 }
+
+func (p *DBRepository) Delete(ctx context.Context, userId uuid.UUID) error {
+	return nil
+}

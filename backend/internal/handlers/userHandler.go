@@ -101,3 +101,22 @@ func (h *UserHandler) UpdateExistingUser(w http.ResponseWriter, r *http.Request)
 
 	w.WriteHeader(http.StatusOK)
 }
+
+func (h *UserHandler) DeleteOneUser(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	param := chi.URLParam(r, "id")
+
+	userId, err := uuid.Parse(param)
+	if err != nil {
+		http.Error(w, "invalid user id", http.StatusBadRequest)
+		return
+	}
+
+	if err = h.Svc.DeleteUser(ctx, userId); err != nil {
+		message := fmt.Sprintf("Internal server error: \n%v", err)
+		http.Error(w, message, http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}

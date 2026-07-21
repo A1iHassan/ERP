@@ -41,3 +41,7 @@ func (s *UserService) UpdateUser(ctx context.Context, payload models.UpdateUserD
 
 	return s.Repo.Update(ctx, payload)
 }
+
+func (s *UserService) DeleteUser(ctx context.Context, userId uuid.UUID) error {
+	return s.Repo.Delete(ctx, userId)
+}

@@ -37,6 +37,7 @@ func main() {
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", userHandler.GetAllUsers)
 		r.Get("/{id}", userHandler.GetOneUser)
+		r.Delete("/{id}", userHandler.DeleteOneUser)
 		r.Post("/", userHandler.CreateUser)
 		r.Patch("/", userHandler.UpdateExistingUser)
 	})
