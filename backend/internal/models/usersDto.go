@@ -1,13 +1,17 @@
 package models
 
+import "github.com/google/uuid"
+
 type GetUsersDTO struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Id    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	Email string    `json:"email"`
 }
 
 type SingleUserDTO struct {
-	Name        string   `json:"name"`
-	Email       string   `json:"email"`
-	Role        string   `json:"role"`
-	Permissions []string `json:"permissions"`
+	Id          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Email       string    `json:"email"`
+	Role        string    `json:"role"`
+	Permissions []string  `json:"permissions"`
 }

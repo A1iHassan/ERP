@@ -17,5 +17,5 @@ func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.G
 }
 
 func (s *UserService) GetSingleUser(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
-	return s.Repo.
+	return s.Repo.GetOne(ctx, userid)
 }

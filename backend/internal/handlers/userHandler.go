@@ -30,6 +30,7 @@ func (h *UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) GetOneUser(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 	param := chi.URLParam(r, "id")
 
 	userId, err := uuid.Parse(param)

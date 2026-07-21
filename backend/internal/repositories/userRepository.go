@@ -16,7 +16,7 @@ type UserRepository interface {
 
 func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 	var users []models.GetUsersDTO
-	usersQuery, err := p.Db.Query(ctx, "SELECT name, email FROM users;")
+	usersQuery, err := p.Db.Query(ctx, "SELECT id, name, email FROM users;")
 	if err != nil {
 		return fmt.Errorf("Internal server error"), nil
 	}
@@ -24,7 +24,7 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 
 	for usersQuery.Next() {
 		var user models.GetUsersDTO
-		if err := usersQuery.Scan(&user.Name, &user.Email); err != nil {
+		if err := usersQuery.Scan(&user.Id, &user.Name, &user.Email); err != nil {
 			return fmt.Errorf("Internal server error at user level"), nil
 		}
 
@@ -38,6 +38,20 @@ func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
 	return nil, users
 }
 
-//func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
-//	
-//}
+func (p *DBRepository) GetOne(ctx context.Context, userid uuid.UUID) (error, models.SingleUserDTO) {
+	var user models.SingleUserDTO
+
+	if err := p.Db.QueryRow(ctx, `SELECT users.id users.name, users.email, roles.name 
+				      COALESCE (json_agg(permissions.name), '[]'::json) 
+				      FROM users 
+				      JOIN roles ON users.role_id = roles.id 
+				      LEFT JOIN role_permission ON users.role_id = role_permission.role_id 
+				      LEFT JOIN permissions ON role_permission.permission_id = permissions.id 
+				      WHERE users.id = $1
+				      GROUP BY users.name, users.email, roles.name`, 
+				      userid).Scan(&user); err != nil {
+		return fmt.Errorf("Unable to query userr"), user
+	}
+
+	return nil, user
+}
