@@ -46,3 +46,27 @@ CREATE TABLE role_permission (
     FOREIGN KEY (role_id) REFERENCES roles(id),
     FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );
+
+
+CREATE FUNCTION auto_update()
+RETURNS TRIGGER AS $$
+BEGIN
+	NEW.updated_at = NOW();
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER updated_at_automatically
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION auto_update();
+
+CREATE TRIGGER updated_at_automatically
+BEFORE UPDATE ON assets
+FOR EACH ROW
+EXECUTE FUNCTION auto_update();
+
+CREATE TRIGGER updated_at_automatically
+BEFORE UPDATE ON roles
+FOR EACH ROW
+EXECUTE FUNCTION auto_update();
