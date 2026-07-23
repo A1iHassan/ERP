@@ -40,9 +40,10 @@ func main() {
 		Host: "smtp.gmail.com:587",
 		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
 	}
+	redisRepository := &repositories.RedisReposiroty{}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
-	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository}
+	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository, Redis: redisRepository}
 	authenticationHandler := &handlers.AuthenticationHandler{Svc: authenticationService}
 
 	r.Route("/users", func(r chi.Router) {

@@ -9,6 +9,7 @@ import (
 type AuthenticationService struct {
 	Repo *repositories.DBRepository
 	Email *repositories.EmailRepository
+	Redis *repositories.RedisReposiroty
 }
 
 func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload models.SignupDTO) error {
