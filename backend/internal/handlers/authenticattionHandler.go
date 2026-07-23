@@ -31,6 +31,8 @@ func (h *AuthenticationHandler) SignupUser (w http.ResponseWriter, r *http.Reque
 		http.Error(w, "Failed to create user", http.StatusBadRequest)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *AuthenticationHandler) ValidateOTP(w http.ResponseWriter, r *http.Request) {

@@ -57,7 +57,7 @@ func main() {
 	redisRepository := &repositories.RedisReposiroty{Cache: redisPool}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
-	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository, Redis: redisRepository}
+	authenticationService := &services.AuthenticationService{Repo: repositories.AuthenticationRepository}
 	authenticationHandler := &handlers.AuthenticationHandler{Svc: authenticationService}
 
 	r.Route("/users", func(r chi.Router) {

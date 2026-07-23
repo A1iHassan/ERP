@@ -4,14 +4,33 @@ import (
 	"backend/internal/models"
 	"backend/internal/repositories"
 	"context"
+	"crypto/rand"
+	"fmt"
+	"math/big"
+	"net/smtp"
 )
 
 type AuthenticationService struct {
-	Repo *repositories.DBRepository
-	Email *repositories.EmailRepository
-	Redis *repositories.RedisReposiroty
+	Repo repositories.AuthenticationRepository
 }
 
 func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload models.SignupDTO) error {
-	return nil
+	max := big.NewInt(1000000)
+	x, err := rand.Int(rand.Reader, max)
+	if err != nil {
+		return err
+	}
+	otp := fmt.Sprintf("%06d", x.Int64())
+
+	subject := "Authentication OTP\r\n"
+	mime := s.Email.Mime
+	body := fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp)
+	
+	if err := smtp.SendMail(s.Email.Host, s.Email.Auth, s.Email.Sender, []string{payload.Email}, []byte(subject + mime + body)); err != nil {
+		return err
+	}
+
+	keyName := fmt.Sprintf("%v-%v", payload.Email, payload.Name)
+
+	return s.Repo.SetPair(keyName, otp)
 }

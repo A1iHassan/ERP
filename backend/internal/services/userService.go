@@ -10,7 +10,7 @@ import (
 )
 
 type UserService struct {
-	Repo *repositories.DBRepository 
+	Repo repositories.UserRepository
 }
 
 func (s *UserService) GetRegisteredUsers(ctx context.Context) (error, []models.GetUsersDTO) {

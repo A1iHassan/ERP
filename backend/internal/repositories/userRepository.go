@@ -10,8 +10,9 @@ import (
 type UserRepository interface {
 	Get(ctx context.Context) (error, []models.GetUsersDTO)
 	GetOne(ctx context.Context, userId uuid.UUID) (error, models.SingleUserDTO)
-	Create(ctx context.Context) error
+	Create(ctx context.Context, payload models.CreateUserDTO) error
 	Update(ctx context.Context, payload models.UpdateUserDTO) error
+	Delete(ctx context.Context, userId uuid.UUID) error
 }
 
 func (p *DBRepository) Get(ctx context.Context) (error, []models.GetUsersDTO) {
