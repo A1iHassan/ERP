@@ -33,6 +33,8 @@ func main() {
 	dbRepository := &repositories.DBRepository{Db: pool}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
+	authenticationService := &services.AuthenticationService{Repo: dbRepository}
+	authenticationHandler := &handlers.AuthenticationHandler{Svc: authenticationService}
 
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", userHandler.GetAllUsers)
@@ -40,6 +42,13 @@ func main() {
 		r.Delete("/{id}", userHandler.DeleteOneUser)
 		r.Post("/", userHandler.CreateUser)
 		r.Patch("/", userHandler.UpdateExistingUser)
+	})
+	
+	r.Route("/auth", func(r chi.Router) {
+		r.Post("/signup", authenticationHandler.LoginUser)
+		r.Post("/login", authenticationHandler.SignupUser)
+		r.Get("/refresh", authenticationHandler.RefreshToken)
+		r.Get("/me", authenticationHandler.IsItMe)
 	})
 
 	http.ListenAndServe(":8080", r)
