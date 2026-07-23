@@ -7,4 +7,4 @@ type EmailRepository struct {
 	Sender string
 	Host   string
 	Mime   string
-}
+} 

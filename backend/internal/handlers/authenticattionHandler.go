@@ -33,6 +33,9 @@ func (h *AuthenticationHandler) SignupUser (w http.ResponseWriter, r *http.Reque
 	}
 }
 
+func (h *AuthenticationHandler) ValidateOTP(w http.ResponseWriter, r *http.Request) {
+}
+
 func (h *AuthenticationHandler) RefreshToken (w http.ResponseWriter, r *http.Request) {
 }
 

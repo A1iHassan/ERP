@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/smtp"
+	"os"
 
 	"backend/internal/handlers"
 	"backend/internal/repositories"
@@ -34,7 +35,7 @@ func main() {
 
 	dbRepository := &repositories.DBRepository{Db: pool}
 	emailRepository := &repositories.EmailRepository{
-		Auth: smtp.PlainAuth("", "", "", ""),
+		Auth: smtp.PlainAuth("", "ali012wkout@gmail.com", os.Getenv("GMAIL_APP_PASSWORD"), "smtp.gmail.com"),
 		Sender: "ali012wkout@gmail.com",
 		Host: "smtp.gmail.com:587",
 		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
@@ -55,6 +56,7 @@ func main() {
 	r.Route("/auth", func(r chi.Router) {
 		r.Post("/signup", authenticationHandler.SignupUser)
 		r.Post("/login", authenticationHandler.LoginUser)
+		r.Post("/otp", authenticationHandler.ValidateOTP)
 		r.Get("/refresh", authenticationHandler.RefreshToken)
 		r.Get("/me", authenticationHandler.IsItMe)
 	})
