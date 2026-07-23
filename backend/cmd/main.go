@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/smtp"
+
+	"backend/internal/handlers"
+	"backend/internal/repositories"
+	"backend/internal/services"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"backend/internal/handlers"
-	"backend/internal/services"
-	"backend/internal/repositories"
 )
 
 func main() {
@@ -31,9 +33,15 @@ func main() {
 	r := chi.NewRouter()
 
 	dbRepository := &repositories.DBRepository{Db: pool}
+	emailRepository := &repositories.EmailRepository{
+		Auth: smtp.PlainAuth("", "", "", ""),
+		Sender: "ali012wkout@gmail.com",
+		Host: "smtp.gmail.com:587",
+		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
+	}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
-	authenticationService := &services.AuthenticationService{Repo: dbRepository}
+	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository}
 	authenticationHandler := &handlers.AuthenticationHandler{Svc: authenticationService}
 
 	r.Route("/users", func(r chi.Router) {
@@ -45,8 +53,8 @@ func main() {
 	})
 	
 	r.Route("/auth", func(r chi.Router) {
-		r.Post("/signup", authenticationHandler.LoginUser)
-		r.Post("/login", authenticationHandler.SignupUser)
+		r.Post("/signup", authenticationHandler.SignupUser)
+		r.Post("/login", authenticationHandler.LoginUser)
 		r.Get("/refresh", authenticationHandler.RefreshToken)
 		r.Get("/me", authenticationHandler.IsItMe)
 	})
