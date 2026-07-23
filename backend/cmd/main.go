@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/smtp"
 	"os"
+	"time"
 
 	"backend/internal/handlers"
 	"backend/internal/repositories"
@@ -13,6 +14,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
 )
 
 func main() {
@@ -31,6 +33,18 @@ func main() {
 		return
 	}
 
+	redisPool := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+		DB: 0,
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
+
+	if err := redisPool.Ping(ctx).Err(); err != nil {
+		fmt.Printf("Redis not reachable due to error: %v", err)
+	}
+
 	r := chi.NewRouter()
 
 	dbRepository := &repositories.DBRepository{Db: pool}
@@ -40,7 +54,7 @@ func main() {
 		Host: "smtp.gmail.com:587",
 		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
 	}
-	redisRepository := &repositories.RedisReposiroty{}
+	redisRepository := &repositories.RedisReposiroty{Cache: redisPool}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
 	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository, Redis: redisRepository}
