@@ -49,7 +49,7 @@ func main() {
 
 	dbRepository := &repositories.DBRepository{Db: pool}
 	emailing := &repositories.EmailRepository{
-		Auth: smtp.PlainAuth("", "ali012wkout@gmail.com", os.Getenv("GMAIL_APP_PASSWORD"), "smtp.gmail.com"),
+		Auth: smtp.PlainAuth("", "ali012wkout@gmail.com", os.Getenv("NEW_GMAIL"), "smtp.gmail.com"),
 		Sender: "ali012wkout@gmail.com",
 		Host: "smtp.gmail.com:587",
 		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
@@ -77,5 +77,7 @@ func main() {
 		r.Get("/", authenticationHandler.Health)
 	})
 
+	fmt.Print("here")
+	fmt.Print(len(os.Getenv("NEW_GMAIL")))
 	http.ListenAndServe(":8080", r)
 }

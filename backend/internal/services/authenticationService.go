@@ -16,7 +16,7 @@ type AuthenticationService struct {
 	Emailing repositories.EmailingRepo
 }
 
-func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload models.SignupDTO) error {
+func (s *AuthenticationService) SendOTP(ctx context.Context, payload models.SignupDTO) error {
 	max := big.NewInt(1000000)
 	x, err := rand.Int(rand.Reader, max)
 	if err != nil {
@@ -28,6 +28,7 @@ func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload model
 	mime := s.Emailing.MimeProv()
 	body := fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp)
 	
+	fmt.Print(s.Emailing.AuthProv())
 	if err := smtp.SendMail(s.Emailing.HostProv(), s.Emailing.AuthProv(), s.Emailing.SenderProv(), []string{payload.Email}, []byte(subject + mime + body)); err != nil {
 		return err
 	}
@@ -38,5 +39,5 @@ func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload model
 }
 
 func (s *AuthenticationService) PrintSender() string {
-	return s.Emailing.SenderProv()
+	return "up"
 }

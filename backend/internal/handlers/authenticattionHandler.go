@@ -17,7 +17,7 @@ func (h *AuthenticationHandler) LoginUser (w http.ResponseWriter, r *http.Reques
 
 func (h *AuthenticationHandler) SignupUser (w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	if r.Header.Get("Cotent-Type") != "application/json" {
+	if r.Header.Get("Content-Type") != "application/json" {
 		http.Error(w, "Invalid payload", http.StatusBadRequest)
 		return
 	}
@@ -28,8 +28,9 @@ func (h *AuthenticationHandler) SignupUser (w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err := h.Svc.SignupNewUser(ctx, payload); err != nil {
-		http.Error(w, "Failed to create user", http.StatusBadRequest)
+	if err := h.Svc.SendOTP(ctx, payload); err != nil {
+		message := fmt.Sprintf("Failed to create user due to error: %v", err)
+		http.Error(w, message, http.StatusBadRequest)
 		return
 	}
 
