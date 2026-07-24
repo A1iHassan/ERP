@@ -11,7 +11,9 @@ import (
 )
 
 type AuthenticationService struct {
-	Repo repositories.AuthenticationRepository
+	Repo repositories.AuthenticationDB
+	Cache repositories.AuthenticationCache
+	Emailing repositories.EmailingRepo
 }
 
 func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload models.SignupDTO) error {
@@ -23,14 +25,18 @@ func (s *AuthenticationService) SignupNewUser(ctx context.Context, payload model
 	otp := fmt.Sprintf("%06d", x.Int64())
 
 	subject := "Authentication OTP\r\n"
-	mime := s.Email.Mime
+	mime := s.Emailing.MimeProv()
 	body := fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp)
 	
-	if err := smtp.SendMail(s.Email.Host, s.Email.Auth, s.Email.Sender, []string{payload.Email}, []byte(subject + mime + body)); err != nil {
+	if err := smtp.SendMail(s.Emailing.HostProv(), s.Emailing.AuthProv(), s.Emailing.SenderProv(), []string{payload.Email}, []byte(subject + mime + body)); err != nil {
 		return err
 	}
 
 	keyName := fmt.Sprintf("%v-%v", payload.Email, payload.Name)
 
-	return s.Repo.SetPair(keyName, otp)
+	return s.Cache.SetPair(keyName, otp)
+}
+
+func (s *AuthenticationService) PrintSender() string {
+	return s.Emailing.SenderProv()
 }

@@ -4,6 +4,7 @@ import (
 	"backend/internal/models"
 	"backend/internal/services"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -42,4 +43,10 @@ func (h *AuthenticationHandler) RefreshToken (w http.ResponseWriter, r *http.Req
 }
 
 func (h *AuthenticationHandler) IsItMe (w http.ResponseWriter, r *http.Request) {
+}
+
+func (h *AuthenticationHandler) Health(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(h.Svc.PrintSender())
+
+	w.WriteHeader(http.StatusOK)
 }

@@ -48,16 +48,16 @@ func main() {
 	r := chi.NewRouter()
 
 	dbRepository := &repositories.DBRepository{Db: pool}
-	emailRepository := &repositories.EmailRepository{
+	emailing := &repositories.EmailRepository{
 		Auth: smtp.PlainAuth("", "ali012wkout@gmail.com", os.Getenv("GMAIL_APP_PASSWORD"), "smtp.gmail.com"),
 		Sender: "ali012wkout@gmail.com",
 		Host: "smtp.gmail.com:587",
 		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
 	}
-	redisRepository := &repositories.RedisReposiroty{Cache: redisPool}
+	caching := &repositories.RedisReposiroty{Cache: redisPool}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
-	authenticationService := &services.AuthenticationService{Repo: dbRepository, Email: emailRepository, Redis: redisRepository}
+	authenticationService := &services.AuthenticationService{Repo: dbRepository, Emailing: emailing, Cache: caching}
 	authenticationHandler := &handlers.AuthenticationHandler{Svc: authenticationService}
 
 	r.Route("/users", func(r chi.Router) {
@@ -74,6 +74,7 @@ func main() {
 		r.Post("/otp", authenticationHandler.ValidateOTP)
 		r.Get("/refresh", authenticationHandler.RefreshToken)
 		r.Get("/me", authenticationHandler.IsItMe)
+		r.Get("/", authenticationHandler.Health)
 	})
 
 	http.ListenAndServe(":8080", r)
