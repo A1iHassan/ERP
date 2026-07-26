@@ -13,6 +13,7 @@ import (
 	"backend/internal/services"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
 )
@@ -46,6 +47,8 @@ func main() {
 	}
 
 	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 
 	dbRepository := &repositories.DBRepository{Db: pool}
 	emailing := &repositories.EmailRepository{
@@ -77,7 +80,5 @@ func main() {
 		r.Get("/", authenticationHandler.Health)
 	})
 
-	fmt.Print("here")
-	fmt.Print(len(os.Getenv("NEW_GMAIL")))
 	http.ListenAndServe(":8080", r)
 }
