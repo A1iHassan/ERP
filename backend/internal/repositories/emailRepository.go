@@ -1,10 +1,9 @@
 package repositories
 
-import "net/smtp"
+import (
+	"google.golang.org/api/gmail/v1"
+)
 
 type EmailRepository struct {
-	Auth   smtp.Auth
-	Sender string
-	Host   string
-	Mime   string
+	EmailClient *gmail.Service
 } 

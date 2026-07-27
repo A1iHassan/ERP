@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/smtp"
 	"os"
 	"time"
 
@@ -16,6 +16,10 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
+	"google.golang.org/api/gmail/v1"
+	"google.golang.org/api/option"
 )
 
 func main() {
@@ -46,17 +50,39 @@ func main() {
 		fmt.Printf("Redis not reachable due to error: %v", err)
 	}
 
+	b, err := os.ReadFile("credentials.json")
+	if err != nil {
+		fmt.Printf("couldn't open credentials file due to error: %v\n", err)
+	}
+
+	config, err := google.ConfigFromJSON(b, gmail.GmailSendScope)
+	if err != nil {
+		fmt.Printf("couldn't create email config due to error: %v\n", err)
+	}
+	
+	f, err := os.Open("token.json")
+	if err != nil {
+		fmt.Printf("couldn't open token file due to error: %v\n", err)
+	}
+	defer f.Close()
+
+	tok := &oauth2.Token{}
+	err = json.NewDecoder(f).Decode(tok)
+
+	emailCtx := context.Background()
+
+	client := config.Client(emailCtx, tok)
+	emailClient, err := gmail.NewService(emailCtx, option.WithHTTPClient(client))
+	if err != nil {
+		fmt.Printf("couldn't create email client due to error: %v\n", err)
+	}
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
 	dbRepository := &repositories.DBRepository{Db: pool}
-	emailing := &repositories.EmailRepository{
-		Auth: smtp.PlainAuth("", "ali012wkout@gmail.com", os.Getenv("NEW_GMAIL"), "smtp.gmail.com"),
-		Sender: "ali012wkout@gmail.com",
-		Host: "smtp.gmail.com:587",
-		Mime: "MIME-version: 1.0;\r\nContent-Type: text/plain; charset=\"UTF-8\";\r\n\r\n",
-	}
+	emailing := &repositories.EmailRepository{EmailClient: emailClient}
 	caching := &repositories.RedisReposiroty{Cache: redisPool}
 	userService := &services.UserService{Repo: dbRepository}
 	userHandler := &handlers.UserHandler{Svc: userService}
