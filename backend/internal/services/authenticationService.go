@@ -33,6 +33,10 @@ func (s *AuthenticationService) SendOTP(ctx context.Context, payload models.Sign
 	return s.Emailing.SendEmail(ctx, payload.Email, subject, body)
 }
 
+func (s *AuthenticationService) RegisterUser(ctx context.Context, payload models.OtpPayload) error {
+	return nil
+}
+
 func (s *AuthenticationService) PrintSender() string {
 	return "up"
 }

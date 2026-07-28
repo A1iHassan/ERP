@@ -12,3 +12,7 @@ type CachedSignUp struct {
 	Password string `json:"password"` 
 	Otp      string `json:"otp"`
 }
+
+type OtpPayload struct {
+	Otp string `json:"otp"`
+}
