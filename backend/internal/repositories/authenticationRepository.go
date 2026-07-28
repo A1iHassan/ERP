@@ -5,9 +5,11 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
+	"github.com/redis/go-redis/v9"
 	"google.golang.org/api/gmail/v1"
 )
 
@@ -44,6 +46,17 @@ func (c *RedisReposiroty) SetSignUpWithOtp(ctx context.Context, value models.Sig
 }
 
 func (c *RedisReposiroty) GetSignUpWithOtp(ctx context.Context, key string, dest interface{}) error {
+	value, err := c.Cache.Get(ctx, key).Bytes()
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return fmt.Errorf("Key not found")
+		}
+		return fmt.Errorf("Couldn't retrieve key/value pair due to error: %v\n", err)
+	}
+
+	if err := json.Unmarshal(value, dest); err != nil {
+		return fmt.Errorf("Couldn't validate retrieved data due to error: %v\n", err)
+	}
 	return nil
 }
 
