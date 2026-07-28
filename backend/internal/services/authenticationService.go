@@ -34,6 +34,11 @@ func (s *AuthenticationService) SendOTP(ctx context.Context, payload models.Sign
 }
 
 func (s *AuthenticationService) RegisterUser(ctx context.Context, payload models.OtpPayload) error {
+	var dest models.CachedSignUp
+	if err := s.Cache.GetSignUpWithOtp(ctx, payload.Otp, &dest); err != nil {
+		return fmt.Errorf("Couldn't find pair due to error: %v\n", err)
+	}
+	fmt.Println("otp found successfully")
 	return nil
 }
 

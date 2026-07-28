@@ -19,7 +19,7 @@ type AuthenticationDB interface {
 
 type AuthenticationCache interface {
 	SetSignUpWithOtp(ctx context.Context, value models.SignupDTO, otp string) error
-	GetSignUpWithOtp(ctx context.Context, key string, dest interface{}) error
+	GetSignUpWithOtp(ctx context.Context, key string, dest *models.CachedSignUp) error
 }
 
 type EmailingRepo interface {
@@ -45,7 +45,7 @@ func (c *RedisReposiroty) SetSignUpWithOtp(ctx context.Context, value models.Sig
 	return nil
 }
 
-func (c *RedisReposiroty) GetSignUpWithOtp(ctx context.Context, key string, dest interface{}) error {
+func (c *RedisReposiroty) GetSignUpWithOtp(ctx context.Context, key string, dest *models.CachedSignUp) error {
 	value, err := c.Cache.Get(ctx, key).Bytes()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
