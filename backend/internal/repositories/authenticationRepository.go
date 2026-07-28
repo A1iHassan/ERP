@@ -4,7 +4,9 @@ import (
 	"backend/internal/models"
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"time"
 
 	"google.golang.org/api/gmail/v1"
 )
@@ -23,6 +25,21 @@ type EmailingRepo interface {
 }
 
 func (c *RedisReposiroty) SetSignUpWithOtp(ctx context.Context, value models.SignupDTO, otp string) error {
+	cachedData := models.CachedSignUp{
+		Name: value.Name,
+		Email: value.Email,
+		Password: value.Password,
+		Otp: otp,
+	}
+	data, err := json.Marshal(cachedData)
+	if err != nil {
+		return fmt.Errorf("Couldn't prepare otp data for cache due to error: %v\n", err)
+	}
+
+	if err := c.Cache.Set(ctx, otp, data, 5 * time.Minute).Err(); err != nil {
+		return fmt.Errorf("Couldn't cache data due to error: %v\n", err)
+	}
+
 	return nil
 }
 
