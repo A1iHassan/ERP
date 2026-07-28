@@ -26,6 +26,10 @@ func (s *AuthenticationService) SendOTP(ctx context.Context, payload models.Sign
 	subject := "Authentication OTP\r\n" // message subject
 	body := fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp) // this is the message body	
 
+	if err := s.Cache.SetSignUpWithOtp(ctx, payload, otp); err != nil {
+		return fmt.Errorf("Failed caching otp due to error: %v\n", err)
+	}
+
 	return s.Emailing.SendEmail(ctx, payload.Email, subject, body)
 }
 
