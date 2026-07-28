@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"backend/internal/models"
 	"context"
 	"encoding/base64"
 	"fmt"
@@ -13,14 +14,19 @@ type AuthenticationDB interface {
 }
 
 type AuthenticationCache interface {
-	SetPair(keyName string, otp string) error
+	SetSignUpWithOtp(ctx context.Context, value models.SignupDTO, otp string) error
+	GetSignUpWithOtp(ctx context.Context, key string, dest interface{}) error
 }
 
 type EmailingRepo interface {
 	SendEmail(ctx context.Context, receiver string, subject string, body string) error
 }
 
-func (c *RedisReposiroty) SetPair(keyName string, otp string) error {
+func (c *RedisReposiroty) SetSignUpWithOtp(ctx context.Context, value models.SignupDTO, otp string) error {
+	return nil
+}
+
+func (c *RedisReposiroty) GetSignUpWithOtp(ctx context.Context, key string, dest interface{}) error {
 	return nil
 }
 
