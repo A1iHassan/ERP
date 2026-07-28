@@ -23,10 +23,10 @@ func (s *AuthenticationService) SendOTP(ctx context.Context, payload models.Sign
 	}
 	otp := fmt.Sprintf("%06d", x.Int64())
 
-	_ = "Authentication OTP\r\n" // message subject
-	_ = fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp) // this is the message body	
+	subject := "Authentication OTP\r\n" // message subject
+	body := fmt.Sprintf("This is your OTP code: %v. Make sure to not share with anybody else", otp) // this is the message body	
 
-	return nil
+	return s.Emailing.SendEmail(ctx, payload.Email, subject, body)
 }
 
 func (s *AuthenticationService) PrintSender() string {
