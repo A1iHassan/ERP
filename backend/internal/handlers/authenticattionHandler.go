@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 type AuthenticationHandler struct {
@@ -25,11 +26,30 @@ func (h *AuthenticationHandler) LoginUser (w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	if err := h.Svc.CreateSession(ctx, payload); err != nil {
+	err, accessToken, refreshToken := h.Svc.CreateSession(ctx, payload)
+	if err != nil {
 		message := fmt.Sprintf("Couldn't log user in due to error: %v\n", err)
 		http.Error(w, message, http.StatusInternalServerError)
 		return
 	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name: "accessToken",
+		Value: accessToken,
+		Expires: time.Now().Add(15 * time.Minute),
+		HttpOnly: true,
+		Secure: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+	 
+	http.SetCookie(w, &http.Cookie{
+		Name: "refreshToken",
+		Value: refreshToken,
+		Expires: time.Now().Add(7 * 24 * time.Hour),
+		HttpOnly: true,
+		Secure: true,
+		SameSite: http.SameSiteStrictMode,
+	})
 
 	w.WriteHeader(http.StatusOK)
 }
