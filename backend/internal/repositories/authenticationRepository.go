@@ -15,6 +15,7 @@ import (
 
 type AuthenticationDB interface {
 	temp()
+	CreateUserRole(ctx context.Context, payload models.CreateUserDTO) error 
 }
 
 type AuthenticationCache interface {
@@ -73,3 +74,14 @@ func (e *EmailRepository) SendEmail(ctx context.Context, receiver string, subjec
 }
 
 func (d *DBRepository) temp() {}
+
+func (d *DBRepository) CreateUserRole(ctx context.Context, payload models.CreateUserDTO) error {
+	_, err := d.Db.Exec(ctx, `
+		INSERT INTO users (name, email, passwrod, role_id)
+		VALUES ($1, $2, $3, (SELECT id FROM roles WHERE name = $4))
+	`, payload.Name, payload.Email, payload.Password, payload.Role)
+	if err != nil {
+		return fmt.Errorf("Couldn't create user due to error: %v\n", err)
+	}
+	return nil 
+}
