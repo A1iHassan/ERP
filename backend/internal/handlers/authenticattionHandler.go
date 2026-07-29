@@ -13,6 +13,25 @@ type AuthenticationHandler struct {
 }
 
 func (h *AuthenticationHandler) LoginUser (w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	if r.Header.Get("Content-Type") != "application/json" {
+		http.Error(w, "False request headers", http.StatusBadRequest)
+		return
+	}
+
+	var payload models.LoginDTO
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "Incompatible payload", http.StatusBadRequest)
+		return
+	}
+
+	if err := h.Svc.CreateSession(ctx, payload); err != nil {
+		message := fmt.Sprintf("Couldn't log user in due to error: %v\n", err)
+		http.Error(w, message, http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *AuthenticationHandler) SignupUser (w http.ResponseWriter, r *http.Request) {
@@ -70,3 +89,4 @@ func (h *AuthenticationHandler) Health(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
