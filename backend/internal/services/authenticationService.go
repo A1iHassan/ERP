@@ -64,13 +64,13 @@ func (s *AuthenticationService) PrintSender() string {
 	return "up"
 }
 
-func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.LoginDTO) error {
-	err, user := s.Repo.UserExists(ctx, payload)
+func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) error {
+	err, user := s.Repo.UserExists(ctx, payload.Email)
 	if err != nil {
 		return fmt.Errorf("Couldn't find user due to error: %v\n", err)
 	}
 
-
+	fmt.Println(user)
 
 	return nil
 }

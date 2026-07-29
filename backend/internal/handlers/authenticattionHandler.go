@@ -19,7 +19,7 @@ func (h *AuthenticationHandler) LoginUser (w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var payload models.LoginDTO
+	var payload models.SignupDTO
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "Incompatible payload", http.StatusBadRequest)
 		return
