@@ -7,6 +7,8 @@ import (
 	"crypto/rand"
 	"fmt"
 	"math/big"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthenticationService struct {
@@ -38,7 +40,23 @@ func (s *AuthenticationService) RegisterUser(ctx context.Context, payload models
 	if err := s.Cache.GetSignUpWithOtp(ctx, payload.Otp, &dest); err != nil {
 		return fmt.Errorf("Couldn't find pair due to error: %v\n", err)
 	}
-	fmt.Println("otp found successfully")
+
+	bytes, err := bcrypt.GenerateFromPassword([]byte(dest.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("Couldn't hash passwrd due to error: %v\n", err)
+	}
+
+	newUser := models.CreateUserDTO{
+		Name: dest.Name,
+		Email: dest.Email,
+		Password: string(bytes),
+		Role: "user",
+	}
+
+	if err := s.Repo.CreateUserRole(ctx, newUser); err != nil {
+		return fmt.Errorf("Couldn't create new user due to error: %v\n", err)
+	}
+
 	return nil
 }
 
