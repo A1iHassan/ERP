@@ -16,6 +16,7 @@ import (
 type AuthenticationDB interface {
 	temp()
 	CreateUserRole(ctx context.Context, payload models.CreateUserDTO) error 
+	UserExists(ctx context.Context, payload models.LoginDTO) (error, interface{})
 }
 
 type AuthenticationCache interface {
@@ -84,4 +85,13 @@ func (d *DBRepository) CreateUserRole(ctx context.Context, payload models.Create
 		return fmt.Errorf("Couldn't create user due to error: %v\n", err)
 	}
 	return nil 
+}
+
+func (d *DBRepository) UserExists(ctx context.Context, payload models.LoginDTO) (error, interface{}) {
+	var user interface{}
+	if err := d.Db.QueryRow(ctx, "SELECT (name, email) FROM users WHERE email = $1", payload.Email).Scan(&user); err != nil {
+		return fmt.Errorf("Couldn't find user due to error: %v\n", err), user
+	}
+		
+	return nil, user
 }
