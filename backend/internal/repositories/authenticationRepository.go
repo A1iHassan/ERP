@@ -77,7 +77,7 @@ func (d *DBRepository) temp() {}
 
 func (d *DBRepository) CreateUserRole(ctx context.Context, payload models.CreateUserDTO) error {
 	_, err := d.Db.Exec(ctx, `
-		INSERT INTO users (name, email, passwrod, role_id)
+		INSERT INTO users (name, email, password, role_id)
 		VALUES ($1, $2, $3, (SELECT id FROM roles WHERE name = $4))
 	`, payload.Name, payload.Email, payload.Password, payload.Role)
 	if err != nil {
