@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -67,21 +68,20 @@ func (s *AuthenticationService) PrintSender() string {
 	return "up"
 }
 
-func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) (error, string) {
+func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) (error, string, string) {
 	err, hashedPassword := s.Repo.UserExists(ctx, payload.Email)
 	if err != nil {
-		return fmt.Errorf("Couldn't find user due to error: %v\n", err), ""
+		return fmt.Errorf("Couldn't find user due to error: %v\n", err), "", ""
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(payload.Password)); err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-			return fmt.Errorf("Invalid email or password"), ""
+			return fmt.Errorf("Invalid email or password"), "", ""
 		}
-		return fmt.Errorf("Internal server error"), ""
+		return fmt.Errorf("Internal server error"), "", ""
 	}
 	
-	// name this 'claims' in the future for claims usage
-	claims := models.CustomClaims{
+	accessClaims := models.CustomClaims{
 		Email: payload.Email,
 		Role: "",
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -90,9 +90,36 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 			Issuer: "me",
 		},
 	}
-	
-	privPEM := ""
-	newToken := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claims)
 
-	return nil, newToken.SignedString(privPEM)
+	refreshClaims := models.CustomClaims{
+		Email: payload.Email,
+		Role: "",
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: payload.Name,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(7 * 24 * time.Hour)),
+		},
+	}
+	
+	prvPEM := os.Getenv("TOKEN_PRIVATE_KEY")
+	if prvPEM == "" {
+		fmt.Println(fmt.Errorf("No private key found in environment"))
+	}
+	prvKey, err := jwt.ParseEdPrivateKeyFromPEM([]byte(prvPEM))
+	if err != nil {
+		return fmt.Errorf("Couldn't parse privat key due to error: %v\n", err), "", ""
+	}
+	newAccessToken := jwt.NewWithClaims(jwt.SigningMethodEdDSA, accessClaims)
+	newRefreshToken := jwt.NewWithClaims(jwt.SigningMethodEdDSA, refreshClaims)
+
+	accessToken, err := newAccessToken.SignedString(prvKey)
+	if err != nil {
+		return fmt.Errorf("Failed to sign access token with private key"), "", ""
+	}
+	 
+	refreshToken, err := newRefreshToken.SignedString(prvKey)
+	if err != nil {
+		return fmt.Errorf("Failed to sign refresh token with private key"), "", ""
+	}
+
+	return nil, accessToken, refreshToken
 }
