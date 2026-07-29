@@ -5,6 +5,7 @@ import (
 	"backend/internal/repositories"
 	"context"
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"math/big"
 
@@ -65,12 +66,17 @@ func (s *AuthenticationService) PrintSender() string {
 }
 
 func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) error {
-	err, user := s.Repo.UserExists(ctx, payload.Email)
+	err, hashedPassword := s.Repo.UserExists(ctx, payload.Email)
 	if err != nil {
 		return fmt.Errorf("Couldn't find user due to error: %v\n", err)
 	}
 
-	fmt.Println(user)
+	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(payload.Password)); err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return fmt.Errorf("Invalid email or password")
+		}
+		return fmt.Errorf("Internal server error")
+	}
 
 	return nil
 }

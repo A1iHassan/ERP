@@ -3,3 +3,4 @@ credential*
 token*
 tmp/
 tmp/*
+*.pem
