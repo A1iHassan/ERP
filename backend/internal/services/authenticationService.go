@@ -8,7 +8,9 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -76,6 +78,17 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 			return fmt.Errorf("Invalid email or password")
 		}
 		return fmt.Errorf("Internal server error")
+	}
+	
+	// name this 'claims' in the future for claims usage
+	_ = models.CustomClaims{
+		Email: payload.Email,
+		Role: "",
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: payload.Name,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * time.Minute)),
+			Issuer: "me",
+		},
 	}
 
 	return nil

@@ -1,5 +1,7 @@
 package models
 
+import "github.com/golang-jwt/jwt/v5"
+
 type SignupDTO struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
@@ -17,3 +19,8 @@ type OtpPayload struct {
 	Otp string `json:"otp"`
 }
 
+type CustomClaims struct {
+	Email string `json:"email"`
+	Role  string `json:"role"`
+	jwt.RegisteredClaims
+}
