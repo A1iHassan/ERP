@@ -67,21 +67,21 @@ func (s *AuthenticationService) PrintSender() string {
 	return "up"
 }
 
-func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) error {
+func (s *AuthenticationService) CreateSession(ctx context.Context, payload models.SignupDTO) (error, string) {
 	err, hashedPassword := s.Repo.UserExists(ctx, payload.Email)
 	if err != nil {
-		return fmt.Errorf("Couldn't find user due to error: %v\n", err)
+		return fmt.Errorf("Couldn't find user due to error: %v\n", err), ""
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(payload.Password)); err != nil {
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
-			return fmt.Errorf("Invalid email or password")
+			return fmt.Errorf("Invalid email or password"), ""
 		}
-		return fmt.Errorf("Internal server error")
+		return fmt.Errorf("Internal server error"), ""
 	}
 	
 	// name this 'claims' in the future for claims usage
-	_ = models.CustomClaims{
+	claims := models.CustomClaims{
 		Email: payload.Email,
 		Role: "",
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -90,6 +90,9 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 			Issuer: "me",
 		},
 	}
+	
+	privPEM := ""
+	newToken := jwt.NewWithClaims(jwt.SigningMethodEdDSA, claims)
 
-	return nil
+	return nil, newToken.SignedString(privPEM)
 }
