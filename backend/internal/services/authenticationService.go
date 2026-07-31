@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -100,7 +101,7 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 		},
 	}
 	
-	prvPEM := `` // had to hard code the key for testing. replace with env value during production
+	prvPEM := os.Getenv("TOKEN_PRIVATE_KEY")
 	if prvPEM == "" {
 		fmt.Println(fmt.Errorf("No private key found in environment"))
 	}
@@ -125,7 +126,7 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 }
 
 func (s *AuthenticationService) ValidateToken(ctx context.Context, tokenString string) error {
-	var pubKey ed25519.PublicKey
+	pubKey := os.Getenv("TOKEN_PUBLIC_KEY")
 	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
 		// Ensure algorithm matches EdDSA
 		if _, ok := t.Method.(*jwt.SigningMethodEd25519); !ok {

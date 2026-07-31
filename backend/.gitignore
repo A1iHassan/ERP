@@ -4,3 +4,4 @@ token*
 tmp/
 tmp/*
 *.pem
+*.sh
