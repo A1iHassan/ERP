@@ -8,7 +8,7 @@ import './index.css'
 const router = createBrowserRouter([{
 	path: "/auth",
 	element: <AuthPage />,
-	action: authenticateAction,
+	// action: authenticateAction,
 }])
 
 createRoot(document.getElementById('root')!).render(
