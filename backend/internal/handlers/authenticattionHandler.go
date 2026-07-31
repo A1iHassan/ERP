@@ -4,9 +4,12 @@ import (
 	"backend/internal/models"
 	"backend/internal/services"
 	"encoding/json"
+	// "errors"
 	"fmt"
 	"net/http"
 	"time"
+
+	// "github.com/golang-jwt/jwt/v5"
 )
 
 type AuthenticationHandler struct {
@@ -102,6 +105,20 @@ func (h *AuthenticationHandler) RefreshToken (w http.ResponseWriter, r *http.Req
 }
 
 func (h *AuthenticationHandler) IsItMe (w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("accessToken")
+	if err != nil {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
+	token := cookie.Value
+	ctx := r.Context()
+	if err := h.Svc.ValidateToken(ctx, token); err != nil {
+		http.Error(w, "Error validating the token", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (h *AuthenticationHandler) Health(w http.ResponseWriter, r *http.Request) {

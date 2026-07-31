@@ -4,6 +4,7 @@ import (
 	"backend/internal/models"
 	"backend/internal/repositories"
 	"context"
+	"crypto/ed25519"
 	"crypto/rand"
 	"errors"
 	"fmt"
@@ -121,4 +122,26 @@ func (s *AuthenticationService) CreateSession(ctx context.Context, payload model
 	}
 
 	return nil, accessToken, refreshToken
+}
+
+func (s *AuthenticationService) ValidateToken(ctx context.Context, tokenString string) error {
+	var pubKey ed25519.PublicKey
+	token, err := jwt.ParseWithClaims(tokenString, &models.CustomClaims{}, func(t *jwt.Token) (interface{}, error) {
+		// Ensure algorithm matches EdDSA
+		if _, ok := t.Method.(*jwt.SigningMethodEd25519); !ok {
+			return nil, jwt.ErrTokenSignatureInvalid
+		}
+		return pubKey, nil
+	})
+
+	if err != nil || !token.Valid {
+		return err
+	}
+
+	_, ok := token.Claims.(*models.CustomClaims)
+	if !ok {
+		return jwt.ErrTokenInvalidClaims
+	}
+
+	return nil
 }
