@@ -10,6 +10,7 @@ export const authenticationAction = async ({ request }: ActionFunctionArgs) => {
 
 	const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8080"
 
+	console.log("triggered")
 	try {
 		await axios.post(apiUrl + "/auth/" + state, { name, email, password }, {
 			headers: {
