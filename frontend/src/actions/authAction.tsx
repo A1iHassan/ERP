@@ -20,6 +20,7 @@ export const authenticationAction = async ({ request }: ActionFunctionArgs) => {
 		})
 
 		const url = new URL(request.url);
+		if (state === "signup") return redirect("/otp")
     		const redirectTo = url.searchParams.get('redirectTo') || '/';
 		return redirect(redirectTo)
 	} catch {
