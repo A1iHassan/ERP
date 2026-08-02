@@ -29,7 +29,7 @@ const OtpForm = () => {
         onChange={handleChange}
         placeholder="••••••"
         required
-        className="w-full p-4 text-center text-2xl tracking-[1em] outline-none rounded-lg border-2 border-solid border-slate-200 focus:border-slate-400 focus:ring-2 focus:ring-slate-400 transition-all"
+        className="w-full p-4 text-center text-2xl tracking-[1em] outline-none rounded-lg border-2 border-solid border-slate-200 focus:border-slate-400 focus:ring-slate-400 transition-all"
       />
       
       <button 
