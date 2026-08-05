@@ -6,8 +6,13 @@ import AuthPage from './pages/authPage'
 import { authenticationAction } from './actions/authAction'
 import './index.css'
 import Otp from './pages/otpPage'
+import HomePage from './pages/homePage'
 
 const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <HomePage />,
+	},
 	{
 		path: "/auth",
 		element: <AuthPage />,
